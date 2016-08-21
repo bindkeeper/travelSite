@@ -1,0 +1,21 @@
+{% extends 'organizer/base.html'%}
+
+{% block title %}
+	Index
+{% endblock %}
+
+{% block body %}
+{% if all_trips %}
+
+<ul>
+	{% for trip in all_trips %}
+	<li>
+		<a href="{% url 'organizer:detail' trip.id %}" >{{ trip.destination }}</a>
+	</li>
+	{% endfor %}
+</ul>
+{% else %}
+	<h3> You Dont Have Any Trips Yet</h3>
+{% endif %}
+
+{% endblock %}

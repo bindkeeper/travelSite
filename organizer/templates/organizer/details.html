@@ -1,0 +1,45 @@
+{% extends 'organizer/base.html'%}
+
+
+{% block title %}
+	Trip Details
+{% endblock %}
+
+
+{% block body %}
+<h1>{{ trip.destination }}</h1>
+<h3>{{ trip.hotel }}</h3>
+<h3>{{ trip.flight_no }}</h3>
+
+
+
+
+{% if error_message %}
+	<p><strong>{{ error_message }}</strong></p>
+	
+{% endif %}
+
+
+
+<form action="{% url 'organizer:favorite' trip.id %}" method="post">
+	{% csrf_token %}
+	{% for flight in trip.flight_set.all %}
+	<input type="radio" id="{{forloop.counter}}" name="trip" value="{{flight.id}}"/>
+	<label for="{{forloop.counter}}">
+		{{ flight.ticket_number }}
+		{% if flight.is_favorite%}
+			<img src="http://pngimg.com/upload/star_PNG1592.png" height="16" width="16"/>
+		{% endif %}
+	</label><br/>
+	{% endfor %}
+	<input type="submit" value="Submit"> 
+</form>
+
+ <form action="{% url 'organizer:delete_trip' trip.id %}" method="post" style="display: inline;">
+	{% csrf_token %}
+	<input type="hidden" name="trip_id" value="{{ trip.id }}" />
+	<button type="submit" class="btn btn-danger btn-xs">
+		<span class="glyphicon glyphicon-remove"></span>&nbsp; Delete
+	</button>
+</form>
+{% endblock %}

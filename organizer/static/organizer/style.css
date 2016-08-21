@@ -1,0 +1,11 @@
+body {
+	background: white url("image/paper_background.jpg");
+}
+
+.navbar {
+	border-radius: 0px;
+}
+
+.navbar-brand {
+	font-family: 'Courgette', coursive;
+}
