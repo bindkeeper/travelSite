@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.template import loader
 from .forms import  UserForm, TripForm
-from .models import Trip, Flight
+from .models import Trip, Flight, TripType
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
@@ -21,8 +21,11 @@ def create_trip(request):
 			trip.user = request.user
 			trip.save()
 			return render(request, 'organizer/details.html', {'trip' : trip})
+		
+		trip_types = TripType.objects.all()
 		context = {
 			"form": form,
+			"trip_types" : trip_types
 		}
 		return render(request, 'organizer/create_trip.html', context)
 

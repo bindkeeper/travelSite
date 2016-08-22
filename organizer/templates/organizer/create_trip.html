@@ -16,6 +16,13 @@
                     {% endif %}
                     <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
+						
+						<select name="item_id">
+						{% for entry in trip_types %}
+							<option value="{{ entry.id }}" selected="none">{{ entry.type_name }}</option>
+						{% endfor %}
+						</select>
+						
                         {% include 'organizer/form_template.html' %}
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
