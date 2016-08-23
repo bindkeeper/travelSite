@@ -6,7 +6,15 @@ class TripForm(forms.ModelForm):
 
 	class Meta:
 		model = Trip
-		fields = ['destination', 'hotel', 'flight_no']
+		fields = ['trip_type',
+			'destination',
+			'hotel',
+			'hotel_price',
+			'flight_no',
+			'flight_price',
+			'transport_company', 
+			'transport_price',
+		]
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)

@@ -64,6 +64,27 @@ def detail(request, trip_id):
 	trip = get_object_or_404(Trip, pk=trip_id)
 	return render(request, 'organizer/details.html', {'trip' : trip})
 	
+def hotel_change(request, trip_id):
+	trip = get_object_or_404(Trip, pk=trip_id)
+	trip.hotel = request.POST['hotel']
+	trip.hotel_price = request.POST['hotel_price']
+	trip.save()
+	return render(request, 'organizer/details.html', {'trip' : trip})
+	
+def flight_change(request, trip_id):
+	trip = get_object_or_404(Trip, pk=trip_id)
+	trip.flight_no = request.POST['flight_no']
+	trip.flight_price = request.POST['flight_price']
+	trip.save()
+	return render(request, 'organizer/details.html', {'trip' : trip})
+
+def transport_change(request, trip_id):
+	trip = get_object_or_404(Trip, pk=trip_id)
+	trip.transport_company = request.POST['transport_company']
+	trip.transport_price = request.POST['transport_price']
+	trip.save()
+	return render(request, 'organizer/details.html', {'trip' : trip})
+
 def favorite(request, trip_id):
 	trip = get_object_or_404(Trip, pk=trip_id)
 	try:

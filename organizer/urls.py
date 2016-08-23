@@ -14,6 +14,9 @@ urlpatterns = [
 	url(r'^trip/(?P<trip_id>[0-9]+)/$', views.detail, name='detail'),
 	
 	url(r'^trip/(?P<trip_id>[0-9]+)/favorite$', views.favorite, name='favorite'),
+	url(r'^trip/(?P<trip_id>[0-9]+)/hotel_change$', views.hotel_change, name='hotel_change'),
+	url(r'^trip/(?P<trip_id>[0-9]+)/flight_change$', views.flight_change, name='flight_change'),
+	url(r'^trip/(?P<trip_id>[0-9]+)/transport_change$', views.transport_change, name='transport_change'),
 	
 	
 ]
