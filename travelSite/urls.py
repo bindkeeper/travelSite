@@ -21,4 +21,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 	url(r'^organizer/', include('organizer.urls')),
+	url(r'^', include('organizer.urls')),
 ]
