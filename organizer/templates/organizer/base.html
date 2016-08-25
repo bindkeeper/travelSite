@@ -13,7 +13,10 @@
 	<link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="{% static 'organizer/style.css' %}" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="{% static 'organizer/main.js' %}"></script>
 
 	</head>
 <body>
@@ -36,22 +39,11 @@
 					<li class="">
 						<a href="{% url 'organizer:index' %}">
 							<span class="glyphicon glyphicon-briefcase" area-hidden="true"></span>&nbsp;
-							Trips
-						</a>
-					</li>
-					<li class="">
-						<a href="#">
-							<span class="glyphicon glyphicon-plane" area-hidden="true"></span>&nbsp;
-							Flights
+							My Trips
 						</a>
 					</li>
 				</ul>
-				<form class="navbar-form navbar-left" role="search" method="get" action="#">
-					<div class="form-group">
-						<input type="text" class="form-control" name="q" value=""/>
-					</div>
-					<button type="button" class="btn btn-default">Search</button>
-				</form>
+
 				<ul class="nav navbar-nav navbar-right" >
 					<li class="">
 						<a href=" {% url 'organizer:create_trip' %} ">

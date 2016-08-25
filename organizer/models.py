@@ -34,8 +34,12 @@ class Flight(models.Model):
 
 DEFAULT_TRIP_TYPE = 3
 class Trip(models.Model):
+	shared = models.BooleanField(default=False)
 	user = models.ForeignKey(User, default=1)
 	destination = models.CharField(max_length=200)
+	
+	startDate = models.DateField()
+	endDate = models.DateField()
 	
 	hotel = models.CharField(max_length=200)
 	hotel_price = models.DecimalField(max_digits=10, decimal_places=2)

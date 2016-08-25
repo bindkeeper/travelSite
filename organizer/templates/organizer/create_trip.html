@@ -7,18 +7,85 @@
 
     <div class="row">
 
-        <div class="col-sm-12 col-md-7">
+        <div class="col-sm-12 col-md-10">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h3>Add a New Trip</h3>
-                    {% if error_message %}
-                        <p><strong>{{ error_message }}</strong></p>
+                    {% if form.errors %}
+                        <p><strong>{{  form.non_field_errors  }}</strong></p>
                     {% endif %}
                     <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-					
 						
-                        {% include 'organizer/form_template.html' %}
+						<div class="form-group">
+							<div class="col-sm-5">
+								<span class="text-danger small">{{ form.startDate.errors }}</span>
+								<label class="control-label col-sm-4">{{ form.startDate.label_tag }}</label>
+								<div class="col-sm-2">{{ form.startDate }}</div>
+							</div>
+							<div class="col-sm-5">
+								<span class="text-danger small">{{ form.endDate.errors }}</span>
+								<label class="control-label col-sm-4">{{ form.endDate.label_tag }}</label>
+								<div class="col-sm-2">{{ form.endDate }}</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-5">
+								<span class="text-danger small">{{ form.destination.errors }}</span>
+								<label class="control-label col-sm-4">{{ form.destination.label_tag }}</label>
+							<div class="col-sm-2">{{ form.destination }}</div>
+							</div>
+							<div class="col-sm-5">
+								<span class="text-danger small">{{ form.trip_type.errors }}</span>
+								<label class="control-label col-sm-4">{{ form.trip_type.label_tag }}</label>
+							<div class="col-sm-2">{{ form.trip_type }}</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-5">
+								<span class="text-danger small">{{ form.hotel.errors }}</span>
+								<label class="control-label col-sm-4">{{ form.hotel.label_tag }}</label>
+							<div class="col-sm-2">{{ form.hotel }}</div>
+							</div>
+							<div class="col-sm-5">
+								<span class="text-danger small">{{ form.hotel_price.errors }}</span>
+								<label class="control-label col-sm-4">{{ form.hotel_price.label_tag }}</label>
+							<div class="col-sm-2">{{ form.hotel_price }}</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-5">
+								<span class="text-danger small">{{ form.flight_no.errors }}</span>
+								<label class="control-label col-sm-4">{{ form.flight_no.label_tag }}</label>
+							<div class="col-sm-2">{{ form.flight_no }}</div>
+							</div>
+							<div class="col-sm-5">
+								<span class="text-danger small">{{ form.flight_price.errors }}</span>
+								<label class="control-label col-sm-4">{{ form.flight_price.label_tag }}</label>
+							<div class="col-sm-2">{{ form.flight_price }}</div>
+							</div>
+						</div>
+						
+						<div class="form-group	">
+							<div class="col-sm-5">
+								<span class="text-danger small">{{ form.transport_company.errors }}</span>
+								<label class="control-label col-sm-4">{{ form.transport_company.label_tag }}</label>
+							<div class="col-sm-2">{{ form.transport_company }}</div>
+							</div>
+							<div class="col-sm-5">
+								<span class="text-danger small">{{ form.transport_price.errors }}</span>
+								<label class="control-label col-sm-4">{{ form.transport_price.label_tag }}</label>
+							<div class="col-sm-2">{{ form.transport_price }}</div>
+							</div>
+						</div>
+						
+						
+
+						
+                        
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-success">Submit</button>
@@ -31,4 +98,9 @@
     </div>
 
 </div>
+ <script>
+        $(function() {
+            $( ".date" ).datepicker();
+        });
+</script>
 {% endblock %}

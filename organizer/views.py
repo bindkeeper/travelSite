@@ -1,13 +1,13 @@
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.template import loader
 from .forms import  UserForm, TripForm
 from .models import Trip, Flight, TripType
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
-
+from datetime import datetime
 
 # Create your views here.
 
@@ -19,6 +19,7 @@ def create_trip(request):
 		if form.is_valid():
 			trip = form.save(commit=False)
 			trip.user = request.user
+			
 			trip.save()
 			return render(request, 'organizer/details.html', {'trip' : trip})
 		
@@ -30,10 +31,17 @@ def create_trip(request):
 		return render(request, 'organizer/create_trip.html', context)
 
 def delete_trip(request, trip_id):
-    trip = Trip.objects.get(pk=trip_id)
-    trip.delete()
-    all_trips = Trip.objects.filter(user=request.user)
-    return render(request, 'organizer/index.html', {'all_trips' : all_trips})		
+	if not request.user.is_authenticated():
+		return render(request, 'organizer/login.html')
+	try:
+		trip = Trip.objects.get(pk=trip_id, user=request.user)
+		if trip is not None:
+			trip.delete()
+	except (KeyError, Trip.DoesNotExist):
+		pass
+	return redirect('/organizer/', request)
+
+		
 		
 
 def index(request):
@@ -41,15 +49,10 @@ def index(request):
 		return render(request, 'organizer/login.html')
 	else:
 		all_trips = Trip.objects.filter(user=request.user)
+		all_shared_trips = Trip.objects.filter(shared=True)
 	
-		return render(request, 'organizer/index.html', {'all_trips' : all_trips})
-	'''
-	template = loader.get_template('organizer/index.html')
-	context = {
-		'message': 'Hello2'
-	}
-	return HttpResponse(template.render(context, request))
-	'''
+		return render(request, 'organizer/index.html', {'all_trips' : all_trips, 'all_shared_trips': all_shared_trips})
+	
 	
 	
 def detail(request, trip_id):
@@ -62,42 +65,58 @@ def detail(request, trip_id):
 	'''
 	
 	trip = get_object_or_404(Trip, pk=trip_id)
+	
+	if trip.user == request.user:
+		return render(request, 'organizer/details.html', {'trip' : trip, "can_delete": True})
+	else:
+		return render(request, 'organizer/details.html', {'trip' : trip})
+	
+def share(request, trip_id):
+	trip = get_object_or_404(Trip, pk=trip_id)
+	try:
+		if trip.shared:
+			trip.shared = False
+		else:
+			trip.shared = True
+			trip.save()
+	except (KeyError, Trip.DoesNotExist):
+		return JsonResponse({'success': False})
+	else:
+		return JsonResponse({'success': True})
+	
+def date_change(request, trip_id):
+	trip = get_object_or_404(Trip, pk=trip_id)
+	
+	if trip.shared is not True:
+		trip.startDate =  datetime.strptime(request.POST['startDate'], '%m/%d/%Y')
+		trip.endDate = datetime.strptime(request.POST['endDate'], '%m/%d/%Y')
+		trip.save()
 	return render(request, 'organizer/details.html', {'trip' : trip})
+	
 	
 def hotel_change(request, trip_id):
 	trip = get_object_or_404(Trip, pk=trip_id)
-	trip.hotel = request.POST['hotel']
-	trip.hotel_price = request.POST['hotel_price']
-	trip.save()
+	if trip.shared is not True:
+		trip.hotel = request.POST['hotel']
+		trip.hotel_price = request.POST['hotel_price']
+		trip.save()
 	return render(request, 'organizer/details.html', {'trip' : trip})
 	
 def flight_change(request, trip_id):
 	trip = get_object_or_404(Trip, pk=trip_id)
-	trip.flight_no = request.POST['flight_no']
-	trip.flight_price = request.POST['flight_price']
-	trip.save()
+	if trip.shared is not True:
+		trip.flight_no = request.POST['flight_no']
+		trip.flight_price = request.POST['flight_price']
+		trip.save()
 	return render(request, 'organizer/details.html', {'trip' : trip})
 
 def transport_change(request, trip_id):
 	trip = get_object_or_404(Trip, pk=trip_id)
-	trip.transport_company = request.POST['transport_company']
-	trip.transport_price = request.POST['transport_price']
-	trip.save()
+	if trip.shared is not True:
+		trip.transport_company = request.POST['transport_company']
+		trip.transport_price = request.POST['transport_price']
+		trip.save()
 	return render(request, 'organizer/details.html', {'trip' : trip})
-
-def favorite(request, trip_id):
-	trip = get_object_or_404(Trip, pk=trip_id)
-	try:
-		selected_trip = trip.flight_set.get(pk=request.POST['trip'])
-	except(KeyError, Flight.DoesNotExist):
-		return render(request, 'organizer/details.html', {
-		'trip' : trip,
-		'error_message': "You did not select a valid flight",
-		})
-	else:
-		selected_trip.is_favorite=True
-		selected_trip.save()
-		return render(request, 'organizer/details.html', {'trip' : trip})
 
 	
 def register(request):
@@ -128,7 +147,7 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 all_trips = Trip.objects.filter(user=request.user)
-                return render(request, 'organizer/index.html', {'all_trips': all_trips})
+                return redirect('/organizer/', request)
             else:
                 return render(request, 'organizer/login.html', {'error_message': 'Your account has been disabled'})
         else:

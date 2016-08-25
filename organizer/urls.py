@@ -13,10 +13,12 @@ urlpatterns = [
 	url(r'^logout_user/$', views.logout_user, name='logout_user'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/$', views.detail, name='detail'),
 	
-	url(r'^trip/(?P<trip_id>[0-9]+)/favorite$', views.favorite, name='favorite'),
+	
+	url(r'^trip/(?P<trip_id>[0-9]+)/date_change$', views.date_change, name='date_change'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/hotel_change$', views.hotel_change, name='hotel_change'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/flight_change$', views.flight_change, name='flight_change'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/transport_change$', views.transport_change, name='transport_change'),
+	url(r'^trip/(?P<trip_id>[0-9]+)/share$', views.share, name='share'),
 	
 	
 ]
