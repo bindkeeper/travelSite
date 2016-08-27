@@ -46,12 +46,16 @@ def delete_trip(request, trip_id):
 
 def index(request):
 	if not request.user.is_authenticated():
-		return render(request, 'organizer/login.html')
+		all_shared_trips = Trip.objects.filter(shared=True)
+	
+		return render(request, 'organizer/index.html', {'all_shared_trips': all_shared_trips})
+	
+		#return render(request, 'organizer/login.html')
 	else:
 		all_trips = Trip.objects.filter(user=request.user)
 		all_shared_trips = Trip.objects.filter(shared=True)
-	
-		return render(request, 'organizer/index.html', {'all_trips' : all_trips, 'all_shared_trips': all_shared_trips})
+		loged_user = request.user
+		return render(request, 'organizer/index.html', {'all_trips' : all_trips, 'all_shared_trips': all_shared_trips, 'loged_user': loged_user})
 	
 	
 	

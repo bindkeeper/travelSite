@@ -35,6 +35,7 @@
 			<!-- items -->
 			
 			<div class="collapse navbar-collapse" id="topNavBar">
+			{% if loged_user %}
 				<ul class="nav navbar-nav">
 					<li class="">
 						<a href="{% url 'organizer:index' %}">
@@ -58,7 +59,22 @@
 						</a>
 					</li>
 				</ul>
-				
+				{% else %}
+				<ul class="nav navbar-nav navbar-right" >
+					<li class="">
+						<a href=" {% url 'organizer:login_user' %} ">
+							
+							Login
+						</a>
+					</li>
+					<li class="">
+						<a href=" {% url 'organizer:register' %} ">
+							
+							Register
+						</a>
+					</li>
+				</ul>
+				{% endif %}
 			</div>
 		</div>
 	</nav>
