@@ -54,10 +54,9 @@
 				
 				Hotel set : 
 				<select id="id_existing_hotel" name="existing_hotel">
-				{% for hotel in hotels %}
-				<option value="{{ forloop.counter }}">{{ hotel }}</option>
-				{% endfor %}
-				
+					{% for hotel in hotels %}
+					<option value="{{ forloop.counter }}">{{ hotel }}</option>
+					{% endfor %}
 				<label for="comment">Edit:</label> <input id="comment" type="text" name="hotel_price" value="{{ trip.hotel_price }}"/>
 			<input type="submit" value="Submit" />
 		</form>

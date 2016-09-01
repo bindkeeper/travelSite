@@ -51,8 +51,6 @@ def index(request):
 		all_shared_trips = Trip.objects.filter(shared=True)
 	
 		return render(request, 'organizer/index.html', {'all_shared_trips': all_shared_trips})
-	
-		#return render(request, 'organizer/login.html')
 	else:
 		all_trips = Trip.objects.filter(user=request.user)
 		all_shared_trips = Trip.objects.filter(shared=True)
@@ -61,15 +59,7 @@ def index(request):
 	
 	
 	
-def detail(request, trip_id):
-
-	'''
-	try:
-		trip = Trip.objects.get(pk=trip_id)
-	except Trip.DoesNotExist:
-		raise Http404("Trip Does Not Exist")
-	'''
-	
+def detail(request, trip_id):	
 	if not request.user.is_authenticated():
 		all_shared_trips = Trip.objects.filter(shared=True)
 	
@@ -116,8 +106,6 @@ def hotel_change(request, trip_id):
 		trip.save()
 	
 	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
-	
-	#HttpResponsePermanentRedirect(reverse('drink_type', args=(drink.id,)))
 
 	
 def flight_change(request, trip_id):
@@ -125,7 +113,6 @@ def flight_change(request, trip_id):
 	if trip.shared is not True:
 		trip.flight_no = request.POST['flight_no']
 		trip.flight_price = request.POST['flight_price']
-		
 		trip.save()
 	return render(request, 'organizer/details.html', {'trip' : trip})
 
@@ -136,7 +123,6 @@ def transport_change(request, trip_id):
 		trip.transport_price = request.POST['transport_price']
 		trip.save()
 	return redirect('organizer/details.html', request)
-	#return render(request, 'organizer/details.html', {'trip' : trip})
 
 	
 def register(request):
