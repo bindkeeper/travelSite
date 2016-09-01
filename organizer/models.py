@@ -12,13 +12,12 @@ class TripType(models.Model):
 		
 class Hotel(models.Model):
 	hotel_name = models.CharField(max_length=20)
-	
-	
 	def __str__(self):
 		return self.hotel_name
 	
 class Destination(models.Model):
 	destination = models.CharField(max_length=20)
+	destiantion_picture = models.FileField(default=None)
 	
 	def __str__(self):
 		return self.destination
@@ -37,12 +36,16 @@ class Trip(models.Model):
 	shared = models.BooleanField(default=False)
 	user = models.ForeignKey(User, default=1)
 	destination = models.CharField(max_length=200)
+	trip_picture = models.FileField(null=True)
 	
 	startDate = models.DateField()
 	endDate = models.DateField()
 	
 	hotel = models.CharField(max_length=200)
 	hotel_price = models.DecimalField(max_digits=10, decimal_places=2)
+	
+	existing_hotel = models.ForeignKey(Hotel, default=None, null=True, on_delete=models.SET_DEFAULT)
+	existing_hotel_price = models.DecimalField(max_digits=10, decimal_places=2)
 	
 	flight_no = models.CharField(max_length=200)
 	flight_price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -52,13 +55,6 @@ class Trip(models.Model):
 	
 	trip_type = models.ForeignKey(TripType, default=DEFAULT_TRIP_TYPE, on_delete=models.SET_DEFAULT)
 	
-	
-	
-	'''
-	def get_absolute_url(self):
-		return reverse('organizer:detail', kwargs={'pk':self.pk})
-	
-	'''
 	def __str__(self):
 		return self.destination + " - " + self.hotel
 		

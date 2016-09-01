@@ -41,14 +41,23 @@
  <div class="col-sm-12 col-sm-4">
   <div class="well">
 	<div id="hotel" class="details">
-		Hotel : {{ trip.hotel }}
-		Hotel Price : <div id="hotelPrice">{{ trip.hotel_price }}</div><br>
+		Hotel : {{ trip.existing_hotel }}
+		Hotel Price : <div id="hotelPrice">{{ trip.existing_hotel_price }}</div><br>
+		
+		</select>
+		
 		
 	</div>
 	{% if not trip.shared %}
 		<form  class="edit_form" id="hotel_edit_form" name="input" action="{% url 'organizer:hotel_change' trip.id %}" method="post" style="display: none;">
 			{% csrf_token %}
-				<label for="comment">Edit:</label> <input id="comment" type="text" name="hotel" value="{{ trip.hotel }}"/>
+				
+				Hotel set : 
+				<select id="id_existing_hotel" name="existing_hotel">
+				{% for hotel in hotels %}
+				<option value="{{ forloop.counter }}">{{ hotel }}</option>
+				{% endfor %}
+				
 				<label for="comment">Edit:</label> <input id="comment" type="text" name="hotel_price" value="{{ trip.hotel_price }}"/>
 			<input type="submit" value="Submit" />
 		</form>

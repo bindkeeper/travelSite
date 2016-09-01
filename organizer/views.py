@@ -3,11 +3,12 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.template import loader
 from .forms import  UserForm, TripForm
-from .models import Trip, Flight, TripType
+from .models import Trip, Flight, TripType, Hotel
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
 from datetime import datetime
+from django.core.urlresolvers import reverse
 
 # Create your views here.
 
@@ -15,7 +16,7 @@ def create_trip(request):
 	if not request.user.is_authenticated():
 		return render(request, 'organizer/login.html')
 	else:
-		form = TripForm(request.POST or None)
+		form = TripForm(request.POST or None, request.FILES or None)
 		if form.is_valid():
 			trip = form.save(commit=False)
 			trip.user = request.user
@@ -26,7 +27,8 @@ def create_trip(request):
 		trip_types = TripType.objects.all()
 		context = {
 			"form": form,
-			"trip_types" : trip_types
+			"trip_types" : trip_types,
+			'loged_user': request.user
 		}
 		return render(request, 'organizer/create_trip.html', context)
 
@@ -68,12 +70,19 @@ def detail(request, trip_id):
 		raise Http404("Trip Does Not Exist")
 	'''
 	
-	trip = get_object_or_404(Trip, pk=trip_id)
+	if not request.user.is_authenticated():
+		all_shared_trips = Trip.objects.filter(shared=True)
 	
-	if trip.user == request.user:
-		return render(request, 'organizer/details.html', {'trip' : trip, "can_delete": True})
+		return render(request, 'organizer/index.html', {'all_shared_trips': all_shared_trips})
+		
 	else:
-		return render(request, 'organizer/details.html', {'trip' : trip})
+		trip = get_object_or_404(Trip, pk=trip_id)
+		hotels = Hotel.objects.all()
+		loged_user = request.user
+		if trip.user == request.user:
+			return render(request, 'organizer/details.html', {'trip' : trip, "can_delete": True ,'loged_user': loged_user, 'hotels': hotels})
+		else:
+			return render(request, 'organizer/details.html', {'trip' : trip, 'loged_user': loged_user})
 	
 def share(request, trip_id):
 	trip = get_object_or_404(Trip, pk=trip_id)
@@ -103,14 +112,20 @@ def hotel_change(request, trip_id):
 	if trip.shared is not True:
 		trip.hotel = request.POST['hotel']
 		trip.hotel_price = request.POST['hotel_price']
+		trip.existing_hotel = Hotel.objects.get(id=request.POST['existing_hotel'])
 		trip.save()
-	return render(request, 'organizer/details.html', {'trip' : trip})
+	
+	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
+	
+	#HttpResponsePermanentRedirect(reverse('drink_type', args=(drink.id,)))
+
 	
 def flight_change(request, trip_id):
 	trip = get_object_or_404(Trip, pk=trip_id)
 	if trip.shared is not True:
 		trip.flight_no = request.POST['flight_no']
 		trip.flight_price = request.POST['flight_price']
+		
 		trip.save()
 	return render(request, 'organizer/details.html', {'trip' : trip})
 
@@ -120,7 +135,8 @@ def transport_change(request, trip_id):
 		trip.transport_company = request.POST['transport_company']
 		trip.transport_price = request.POST['transport_price']
 		trip.save()
-	return render(request, 'organizer/details.html', {'trip' : trip})
+	return redirect('organizer/details.html', request)
+	#return render(request, 'organizer/details.html', {'trip' : trip})
 
 	
 def register(request):
