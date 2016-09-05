@@ -1,0 +1,154 @@
+{% extends 'organizer/base.html'%}
+
+
+{% block title %}
+	Trip Details
+{% endblock %}
+
+
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="col-sm-12 well">
+					Destination : {{ trip.destination }}
+					Type : {{ trip.trip_type }}
+				</div>
+			</div>
+		</div>
+		{% for node in nodes %}
+		
+		<div class="row">
+			<div class="col-sm-12 well">
+				<div class="col-sm-12 col-md-2">
+					type : {{ node.type }}
+				</div>
+				<div class="details">
+					
+					<div class="col-sm-12 col-md-2">
+						start date : {{ node.startDate }}
+					</div>
+					<div class="col-sm-12 col-md-2">
+						end date: {{ node.endDate }}
+					</div>
+					<div class="col-sm-12 col-md-2">
+						price : <div class="price">{{ node.price }}</div>
+					</div>
+				</div>
+				{% if can_delete %}
+				<form class="edit_form" name="input" action="{% url 'organizer:node_edit' trip.id %}" method="post" style="display: none;">
+					{% csrf_token %}
+					<input type="hidden" name="node_id" value="{{ node.id }}">
+					<select id="type_select" name="type">
+						{% for type in types %}
+						<option value="{{ forloop.counter }}">{{ type }}</option>
+						{% endfor %}
+					</select>
+					<label for="comment">startDate:</label> <input class="date" id="id_startDate" name="startDate" type="text" value="{{ trip.startDate|date:'m/d/Y' }}">
+					<label for="id_endDate">endDate:</label> 
+					<input class="date" id="id_endDate" name="endDate" type="text" value="{{ trip.endDate|date:'m/d/Y' }}">
+					<label for="comment">price:</label> <input id="comment" type="text" name="price" value="{{ node.price }}"/>
+					<input type="submit" value="Submit"/>
+				</form>
+				
+				
+					<button type="button" id="editDate" class="edit btn btn-success">Edit</button>
+					<form action="{% url 'organizer:node_delete' trip.id %}" method="post">
+					{% csrf_token %}
+						<input type="hidden" name="node_id" value="{{ node.id }}">
+						<input type="submit" value="Delete"/>
+					</form>
+					<input type="button" value="Cancel" id="cancelEditDate" class="cancel" style="display: none;"/>
+				{%endif%}
+			</div>
+		</div>
+		
+		{% endfor %}
+		{% if can_delete %}
+		 <div class="row">
+			<div class="col-sm-12 well">
+			 <form action="{% url 'organizer:add_node' trip.id %}" method="post" style="display: inline;">
+					 {% csrf_token %}
+					<input type="hidden" name="song_id" value="1" />
+					<button  type="submit" class="btn btn-success btn-xs">
+						<span class="glyphicon glyphicon-plus"></span>&nbsp; Add
+					</button>
+				</form>
+			</div>
+		</div>
+		{% endif %}
+		
+	</div>
+
+<div class="col-xs-12">
+  <div class="well">
+	<div id="total">
+		<div id="totalLable">
+			Total Price :
+		</div>
+		<div id="totalSum">
+		</div>
+	</div>
+	</div>
+</div>
+
+
+{% if error_message %}
+	<p><strong>{{ error_message }}</strong></p>
+	
+{% endif %}
+
+
+
+{% if can_delete %}
+<div class="col-sm-12">
+ <form action="{% url 'organizer:delete_trip' trip.id %}" method="post" style="display: inline;">
+	{% csrf_token %}
+	<input type="hidden" name="trip_id" value="{{ trip.id }}" />
+	<button type="submit" class="btn btn-danger btn-xs">
+		<span class="glyphicon glyphicon-remove"></span>&nbsp; Delete
+	</button>
+</form>
+</div>
+{% endif %}
+
+
+<script>
+$(function() {
+	
+	var sum = 0;
+	/*
+	 sum += +($(this).find('#hotelPrice').text());
+	 sum += +($(this).find('#flightPrice').text()); 
+	 sum += +($(this).find('#transportPrice').text());
+	*/
+	$(".price").each(function (index) {
+		price = parseInt($(this).text());
+		if (!(isNaN(price)) ){
+			sum += price; 
+		}
+	});
+	
+	$("#totalSum").html(sum);
+	$(".date").datepicker();
+});
+
+$('.edit').click(function(){
+	$(this).siblings('.edit_form').show();
+	$(this).siblings('.details').hide();
+	$(this).siblings('.cancel').show();
+	$(this).hide();
+});
+
+$('.cancel').click(function(){
+	$(this).siblings('.details').show();
+	$(this).siblings('.edit_form').hide();
+	$(this).siblings('.edit').show();
+	$(this).hide();
+});
+
+
+</script>
+
+{% endblock %}
+

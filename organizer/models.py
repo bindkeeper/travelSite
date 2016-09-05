@@ -8,7 +8,12 @@ class TripType(models.Model):
 	def __str__(self):
 		return self.type_name
 		
-		
+
+class NodeType(models.Model):
+	type_name = models.CharField(max_length=20)
+	
+	def __str__(self):
+		return self.type_name
 		
 class Hotel(models.Model):
 	hotel_name = models.CharField(max_length=20)
@@ -56,12 +61,24 @@ class Trip(models.Model):
 	trip_type = models.ForeignKey(TripType, default=DEFAULT_TRIP_TYPE, on_delete=models.SET_DEFAULT, blank=True)
 	
 	def __str__(self):
-		return self.destination + " - " + self.hotel
+		return self.destination 
 		
 		
 		
-
+class NewTrip(models.Model):
+	user = models.ForeignKey(User, default=1)
+	shared = models.BooleanField(default=False)
+	destination = models.CharField(max_length=200)
+	startDate = models.DateField(null=True, blank=True)
+	endDate = models.DateField(null=True, blank=True)
+	trip_picture = models.FileField(null=True, blank=True)
+	trip_type = models.ForeignKey(TripType, default=DEFAULT_TRIP_TYPE, on_delete=models.SET_DEFAULT, blank=True)
 	
-	
+class Node(models.Model):
+	type = models.ForeignKey(NodeType, default=DEFAULT_TRIP_TYPE, on_delete=models.SET_DEFAULT, blank=True)
+	startDate = models.DateField(null=True, blank=True)
+	endDate = models.DateField(null=True, blank=True)
+	price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+	trip = models.ForeignKey(NewTrip, default=None, on_delete=models.SET_DEFAULT, blank=True, null=True)
 
 	

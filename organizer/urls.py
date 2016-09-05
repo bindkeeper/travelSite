@@ -11,13 +11,16 @@ urlpatterns = [
 	url(r'^register/$', views.register, name='register'),
 	url(r'^login/$', views.login_user, name='login_user'),
 	url(r'^logout_user/$', views.logout_user, name='logout_user'),
-	url(r'^trip/(?P<trip_id>[0-9]+)/$', views.detail, name='detail'),
+	url(r'^trip/(?P<trip_id>[0-9]+)/$', views.new_detail, name='detail'),
 	
 	
 	url(r'^trip/(?P<trip_id>[0-9]+)/date_change$', views.date_change, name='date_change'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/hotel_change$', views.hotel_change, name='hotel_change'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/flight_change$', views.flight_change, name='flight_change'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/transport_change$', views.transport_change, name='transport_change'),
+	url(r'^trip/(?P<trip_id>[0-9]+)/add_node$', views.add_node, name='add_node'),
+	url(r'^trip/(?P<trip_id>[0-9]+)/node_edit$', views.node_edit, name='node_edit'),
+	url(r'^trip/(?P<trip_id>[0-9]+)/node_delete$', views.node_delete, name='node_delete'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/share$', views.share, name='share'),
 	
 	

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Trip
+from .models import Trip, NewTrip
 
 class TripForm(forms.ModelForm):
 
@@ -39,8 +39,30 @@ class TripForm(forms.ModelForm):
 			if  not (endDate > startDate):
 				print('raising Error')
 				raise forms.ValidationError('endDate must be after startDate')
+				
+		
 
 		return data
+
+
+		
+		
+class NewCreateTripForm(forms.ModelForm):
+	class Meta:
+		model = NewTrip
+		
+		fields = [
+			'startDate',
+			'endDate',
+			'trip_type',
+			'destination',
+			'trip_picture',
+		]
+		
+		widgets = {
+            'startDate': forms.DateInput(attrs={'class':'date'}),
+            'endDate': forms.DateInput(attrs={'class':'date'}),
+        }
 		
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)

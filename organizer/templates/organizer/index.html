@@ -58,6 +58,39 @@
 				{% endfor %}
 			</div>
 			
+			{% if new_form_trips %}	
+			<div class="col-sm-6 well">
+				<h3>My Trips</h3>
+				{% for trip in new_form_trips %}
+				
+					<div class="col-sm-12 col-md-6">
+						<div class="thumbnail">
+							
+							<div class="caption">
+							{% if trip.trip_picture %}
+							<a href="{% url 'organizer:detail' trip.id %}">
+								<img src="{{ trip.trip_picture.url }}" class="img-responsive">
+							</a>
+							{% endif %}
+								<h2>{{ trip.destination }}</h2>
+								
+
+								<!-- View Details -->
+								<a href="{% url 'organizer:detail' trip.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+
+							   
+								<!-- Favorite Album -->
+								<a href="{% url 'organizer:share' trip.id %}" class="btn btn-default btn-sm btn-share" role="button">
+									Share
+								</a>
+
+							</div>
+						</div>
+						{% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+					</div>
+				{% endfor %}
+			</div>
+			{% endif %}
 			<div class="col-sm-6 well">
 				<h3>Shared Trips</h3>
 				{% for trip in all_shared_trips %}

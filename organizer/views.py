@@ -2,8 +2,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.template import loader
-from .forms import  UserForm, TripForm
-from .models import Trip, Flight, TripType, Hotel
+from .forms import  UserForm, TripForm, NewCreateTripForm
+from .models import Trip, Flight, TripType, Hotel, NewTrip, Node, NodeType
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
@@ -16,13 +16,12 @@ def create_trip(request):
 	if not request.user.is_authenticated():
 		return render(request, 'organizer/login.html')
 	else:
-		form = TripForm(request.POST or None, request.FILES or None)
+		form = NewCreateTripForm(request.POST or None, request.FILES or None)
 		if form.is_valid():
 			trip = form.save(commit=False)
 			trip.user = request.user
-			
 			trip.save()
-			return render(request, 'organizer/details.html', {'trip' : trip})
+			return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip.pk}), request)
 		
 		trip_types = TripType.objects.all()
 		context = {
@@ -30,7 +29,7 @@ def create_trip(request):
 			"trip_types" : trip_types,
 			'loged_user': request.user
 		}
-		return render(request, 'organizer/create_trip.html', context)
+		return render(request, 'organizer/create_new_trip.html', context)
 
 def delete_trip(request, trip_id):
 	if not request.user.is_authenticated():
@@ -48,14 +47,15 @@ def delete_trip(request, trip_id):
 
 def index(request):
 	if not request.user.is_authenticated():
-		all_shared_trips = Trip.objects.filter(shared=True)
+		all_shared_trips = NewTrip	.objects.filter(shared=True)
 	
 		return render(request, 'organizer/index.html', {'all_shared_trips': all_shared_trips})
 	else:
 		all_trips = Trip.objects.filter(user=request.user)
-		all_shared_trips = Trip.objects.filter(shared=True)
+		all_shared_trips = NewTrip.objects.filter(shared=True)
+		new_form_trips = NewTrip.objects.filter(user=request.user)
 		loged_user = request.user
-		return render(request, 'organizer/index.html', {'all_trips' : all_trips, 'all_shared_trips': all_shared_trips, 'loged_user': loged_user})
+		return render(request, 'organizer/index.html', {'all_trips' : new_form_trips, 'all_shared_trips': all_shared_trips, 'loged_user': loged_user,})
 	
 	
 	
@@ -63,7 +63,7 @@ def detail(request, trip_id):
 	if not request.user.is_authenticated():
 		all_shared_trips = Trip.objects.filter(shared=True)
 	
-		return render(request, 'organizer/index.html', {'all_shared_trips': all_shared_trips})
+		return render(request, 'organizer/details.html', {'trip' : trip})
 		
 	else:
 		trip = get_object_or_404(Trip, pk=trip_id)
@@ -74,15 +74,32 @@ def detail(request, trip_id):
 		else:
 			return render(request, 'organizer/details.html', {'trip' : trip, 'loged_user': loged_user})
 	
+def new_detail(request, trip_id):	
+	if not request.user.is_authenticated():
+		trip = get_object_or_404(NewTrip, pk=trip_id)
+		nodes = Node.objects.filter(trip=trip.pk)
+		return render(request, 'organizer/new_details.html', {'trip' : trip, 'nodes': nodes})
+		
+	else:
+		trip = get_object_or_404(NewTrip, pk=trip_id)
+		nodes = Node.objects.filter(trip=trip.pk)
+		types = NodeType.objects.all()
+		loged_user = request.user
+		if trip.user == request.user:
+			return render(request, 'organizer/new_details.html', {'trip' : trip, "can_delete": True ,'loged_user': loged_user, 'nodes': nodes, 'types' : types})
+		else:
+			return render(request, 'organizer/new_details.html', {'trip' : trip, 'loged_user': loged_user, 'nodes': nodes})
+	
+	
 def share(request, trip_id):
-	trip = get_object_or_404(Trip, pk=trip_id)
+	trip = get_object_or_404(NewTrip, pk=trip_id)
 	try:
 		if trip.shared:
 			trip.shared = False
 		else:
 			trip.shared = True
 			trip.save()
-	except (KeyError, Trip.DoesNotExist):
+	except (KeyError, NewTrip.DoesNotExist):
 		return JsonResponse({'success': False})
 	else:
 		return JsonResponse({'success': True})
@@ -143,6 +160,46 @@ def register(request):
         "form": form,
     }
     return render(request, 'organizer/register.html', context)
+
+def add_node(request, trip_id):
+	if not request.user.is_authenticated():
+		trip = get_object_or_404(NewTrip, pk=trip_id)
+		nodes = Node.objects.filter(trip=trip.pk)
+		return render(request, 'organizer/new_details.html', {'trip' : trip, 'nodes': nodes})
+	node = Node()
+	node.trip = NewTrip.objects.get(id=trip_id)
+	node.save()
+	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
+	
+def node_edit(request, trip_id):
+	if not request.user.is_authenticated():
+		trip = get_object_or_404(NewTrip, pk=trip_id)
+		nodes = Node.objects.filter(trip=trip.pk)
+		return render(request, 'organizer/new_details.html', {'trip' : trip, 'nodes': nodes})
+	node_id = request.POST['node_id']
+	node = Node.objects.get(id=node_id)
+	price = request.POST['price']
+	try:
+		float(price)
+		node.price = price
+	except ValueError:
+		pass
+	node.startDate = datetime.strptime(request.POST['startDate'], '%m/%d/%Y')
+	node.endDate = datetime.strptime(request.POST['endDate'], '%m/%d/%Y')
+	node.save()
+	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
+	
+def node_delete(request, trip_id):
+	node_id = request.POST['node_id']
+	
+	try:
+		node = Node.objects.get(pk=node_id)
+		if node is not None:
+			node.delete()
+	except (KeyError, Node.DoesNotExist):
+		pass
+	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
+	
 
 def login_user(request):
     if request.method == "POST":
