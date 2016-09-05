@@ -184,8 +184,10 @@ def node_edit(request, trip_id):
 		node.price = price
 	except ValueError:
 		pass
+	node.type = NodeType.objects.get(id=request.POST['type'])
 	node.startDate = datetime.strptime(request.POST['startDate'], '%m/%d/%Y')
 	node.endDate = datetime.strptime(request.POST['endDate'], '%m/%d/%Y')
+	node.text = request.POST['text']
 	node.save()
 	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
 	

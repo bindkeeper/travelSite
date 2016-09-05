@@ -32,21 +32,29 @@
 						end date: {{ node.endDate }}
 					</div>
 					<div class="col-sm-12 col-md-2">
+					<p>
+						Text : {{ node.text }}
+					</p>
+					</div>
+					<div class="col-sm-12 col-md-2">
 						price : <div class="price">{{ node.price }}</div>
 					</div>
+					
 				</div>
 				{% if can_delete %}
 				<form class="edit_form" name="input" action="{% url 'organizer:node_edit' trip.id %}" method="post" style="display: none;">
 					{% csrf_token %}
 					<input type="hidden" name="node_id" value="{{ node.id }}">
-					<select id="type_select" name="type">
+					<select id="type_select" name="type" >
 						{% for type in types %}
-						<option value="{{ forloop.counter }}">{{ type }}</option>
+						<option value="{{ forloop.counter }}" {% if forloop.counter == node.type.pk %}selected {% endif %}>{{ type }}</option>
 						{% endfor %}
 					</select>
-					<label for="comment">startDate:</label> <input class="date" id="id_startDate" name="startDate" type="text" value="{{ trip.startDate|date:'m/d/Y' }}">
-					<label for="id_endDate">endDate:</label> 
-					<input class="date" id="id_endDate" name="endDate" type="text" value="{{ trip.endDate|date:'m/d/Y' }}">
+					<label>startDate:</label> <input class="date" name="startDate" type="text" value="{{ trip.startDate|date:'m/d/Y' }}">
+					<label >endDate:</label> 
+					<input class="date"  name="endDate" type="text" value="{{ trip.endDate|date:'m/d/Y' }}">
+					<label for="text">Text:</label> 
+					<input type="text" name="text" value="{{ node.text }}"/>
 					<label for="comment">price:</label> <input id="comment" type="text" name="price" value="{{ node.price }}"/>
 					<input type="submit" value="Submit"/>
 				</form>

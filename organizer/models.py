@@ -80,5 +80,6 @@ class Node(models.Model):
 	endDate = models.DateField(null=True, blank=True)
 	price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 	trip = models.ForeignKey(NewTrip, default=None, on_delete=models.SET_DEFAULT, blank=True, null=True)
+	text = models.CharField(max_length=1000)
 
 	
