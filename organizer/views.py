@@ -142,24 +142,6 @@ def transport_change(request, trip_id):
 	return redirect('organizer/details.html', request)
 
 	
-def register(request):
-    form = UserForm(request.POST or None)
-    if form.is_valid():
-        user = form.save(commit=False)
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        user.set_password(password)
-        user.save()
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                all_trips = Trip.objects.filter(user=request.user)
-                return render(request, 'organizer/index.html', {'all_trips': all_trips})
-    context = {
-        "form": form,
-    }
-    return render(request, 'organizer/register.html', context)
 
 def add_node(request, trip_id):
 	if not request.user.is_authenticated():
@@ -202,6 +184,24 @@ def node_delete(request, trip_id):
 		pass
 	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
 	
+def register(request):
+    form = UserForm(request.POST or None)
+    if form.is_valid():
+        user = form.save(commit=False)
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user.set_password(password)
+        user.save()
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                all_trips = Trip.objects.filter(user=request.user)
+                return render(request, 'organizer/index.html', {'all_trips': all_trips})
+    context = {
+        "form": form,
+    }
+    return render(request, 'organizer/register.html', context)
 
 def login_user(request):
     if request.method == "POST":
