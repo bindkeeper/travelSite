@@ -1,6 +1,9 @@
 from django.contrib.auth.models import Permission, User
 from django.db import models
-
+from django.conf import settings
+from django.db.models.fields.files import ImageFieldFile
+from PIL import Image, ExifTags
+import io
 
 class TripType(models.Model):
 	type_name = models.CharField(max_length=20)
@@ -63,7 +66,7 @@ class Trip(models.Model):
 	def __str__(self):
 		return self.destination 
 		
-		
+
 		
 class NewTrip(models.Model):
 	user = models.ForeignKey(User, default=1)
@@ -71,8 +74,21 @@ class NewTrip(models.Model):
 	destination = models.CharField(max_length=200)
 	startDate = models.DateField(null=True, blank=True)
 	endDate = models.DateField(null=True, blank=True)
-	trip_picture = models.FileField(null=True, blank=True)
+	trip_picture = models.ImageField(null=True, blank=True)
 	trip_type = models.ForeignKey(TripType, default=DEFAULT_TRIP_TYPE, on_delete=models.SET_DEFAULT, blank=True)
+	
+	def save(self, *args, **kwargs):
+		if self.trip_picture:
+			super(NewTrip, self).save(*args, **kwargs)
+			path = str(self.trip_picture.path)
+			image = Image.open(path)
+			
+			image.thumbnail((300,300), Image.ANTIALIAS)
+			image.save(path, "JPEG")
+		super(NewTrip, self).save()
+			
+            
+		
 	
 class Node(models.Model):
 	type = models.ForeignKey(NodeType, default=DEFAULT_TRIP_TYPE, on_delete=models.SET_DEFAULT, blank=True)
@@ -81,5 +97,6 @@ class Node(models.Model):
 	price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 	trip = models.ForeignKey(NewTrip, default=None, on_delete=models.SET_DEFAULT, blank=True, null=True)
 	text = models.CharField(max_length=1000)
+	sequance_in_trip = models.IntegerField()
 
 	

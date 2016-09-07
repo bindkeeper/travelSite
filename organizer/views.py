@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 # Create your views here.
 
 def create_trip(request):
+	print("inside create view ")
 	if not request.user.is_authenticated():
 		return render(request, 'organizer/login.html')
 	else:
@@ -35,10 +36,10 @@ def delete_trip(request, trip_id):
 	if not request.user.is_authenticated():
 		return render(request, 'organizer/login.html')
 	try:
-		trip = Trip.objects.get(pk=trip_id, user=request.user)
+		trip = NewTrip.objects.get(pk=trip_id, user=request.user)
 		if trip is not None:
 			trip.delete()
-	except (KeyError, Trip.DoesNotExist):
+	except (KeyError, NewTrip.DoesNotExist):
 		pass
 	return redirect('/organizer/', request)
 
