@@ -3,7 +3,7 @@
 {% block title %}
 	Index
 {% endblock %}
-
+{% load staticfiles %}
 {% block body %}
 	{% if not loged_user %}
 		<div class="col-sm-6 well">
@@ -12,11 +12,15 @@
 			<div class="col-sm-12 col-md-6">
 				<div class="thumbnail">	
 					<div class="caption">
-						{% if trip.trip_picture %}
+						
 						<a href="{% url 'organizer:detail' trip.id %}">
+							{% if trip.trip_picture %}
                             <img src="{{ trip.trip_picture.url }}" class="img-responsive">
+							{% else %}
+							<img src="{% static 'organizer/image/ski.jpg' %}" class="img-responsive">
+							{% endif %}
                         </a>
-						{% endif %}
+						
 						<h2>{{ trip.destination }}</h2>
 						<!-- View Details -->
 						<a href="{% url 'organizer:detail' trip.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
@@ -70,11 +74,15 @@
 					<div class="col-sm-12 col-md-6">
 						<div class="thumbnail">
 							<div class="caption">
-							{% if trip.trip_picture %}
+						
 							<a href="{% url 'organizer:detail' trip.id %}">
-								<img src="{{ trip.trip_picture.url }}" class="img-responsive">
-							</a>
+							{% if trip.trip_picture %}
+                            <img src="{{ trip.trip_picture.url }}" class="img-responsive">
+							{% else %}
+							<img src="{% static 'organizer/image/ski.jpg' %}" class="img-responsive">
 							{% endif %}
+							</a>
+							
 								<h2>{{ trip.destination }}</h2>
 								<!-- View Details -->
 								<a href="{% url 'organizer:detail' trip.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
