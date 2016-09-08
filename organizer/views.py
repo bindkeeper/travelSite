@@ -2,10 +2,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.template import loader
-from .forms import  UserForm, TripForm, NewCreateTripForm
+from .forms import  UserForm, TripForm, NewCreateTripForm, MyRegistrationForm
 from .models import Trip, Flight, TripType, Hotel, NewTrip, Node, NodeType
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import View
 from datetime import datetime
 from django.core.urlresolvers import reverse
@@ -186,11 +187,11 @@ def node_delete(request, trip_id):
 	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
 	
 def register(request):
-    form = UserForm(request.POST or None)
+    form = MyRegistrationForm(request.POST or None)
     if form.is_valid():
         user = form.save(commit=False)
         username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
+        password = form.cleaned_data['password1']
         user.set_password(password)
         user.save()
         user = authenticate(username=username, password=password)
