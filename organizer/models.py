@@ -97,6 +97,6 @@ class Node(models.Model):
 	price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 	trip = models.ForeignKey(NewTrip, default=None, on_delete=models.SET_DEFAULT, blank=True, null=True)
 	text = models.CharField(max_length=1000)
-	sequance_in_trip = models.IntegerField()
+	sequance_in_trip = models.IntegerField(null=True)
 
 	
