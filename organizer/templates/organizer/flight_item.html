@@ -1,0 +1,52 @@
+{% load staticfiles %}
+
+<div class="row">
+	<div class=" col-xs-offset-11 col-xs-1 delete-item">
+		<form action="{% url 'organizer:node_delete' trip.id %}" method="post">
+			{% csrf_token %}
+			<input type="hidden" name="node_id" value="{{ node.id }}">
+			<button type="submit" class="btn btn-danger "/>
+				<span class="glyphicon glyphicon-remove"></span>
+			</button>
+		</form>
+	</div>
+</div>
+<div class="row">
+	<form name="input" action="{% url 'organizer:node_edit' trip.id %}" method="post">
+		{% csrf_token %}
+		<input type="hidden" name="node_id" value="{{ node.id }}">
+		<div class="col-xs-12 col-sm-5">
+			<div><i class="btn glyphicon glyphicon-plane item-type-icon"></i></div>
+			<h5 class="flight-number">Flight #</h5>
+				<div class="flight-departure"><img src="{% static 'organizer/icons/departure.svg' %}" class="departure-icon" height="20" ></img>
+				<h5>TakeOff Time</h5>
+				<input size="5" class="date form-control" name="startDate" type="text" value="{{ node.startDate|date:'m/d/Y' }}">
+				<p class="airport">Departure Airport</p>
+			</div >
+			<div class="flight-arrival">
+				<img src="{% static 'organizer/icons/arrival.svg' %}" class="departure-icon" height="20" ></img>
+				<h5>Landing Time</h5>
+				<div class="text-center">
+				<input size="5" class="date input-price form-control" name="endDate" type="text" value="{{ node.endDate|date:'m/d/Y' }}">
+				
+				</div>
+				<p class="airport">Arrival Airport</p>
+			</div>
+			<div class="text-center clear-float">
+				
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-4">
+			<h4 class="list-group-item-heading"> Free Text </h4>
+			<textarea name="text"  class=" form-control list-group-item-text free-text ">{{node.text}}</textarea>
+		</div>
+		<div class="col-xs-12 col-sm-3 text-center">
+			<div>
+				<h2><input class="form-control price input-price" type="text" name="price" value="{{ node.price }}"/><span class="currency">$<span></h2>
+			</div>
+			<h4>Total 2 hours</h4>
+			<input type="submit" value="Save" class="btn btn-primary btn-lg  btn-block"/>
+		</div>
+		<div class="clearfix"></div>
+	</form>
+</div>

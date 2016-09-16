@@ -7,7 +7,7 @@
 
 
 {% block body %}
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row">
 			
 				<div class="col-xs-12 well">
@@ -19,55 +19,80 @@
 		{% for node in nodes %}
 		
 		<div class="row">
-			<div class="col-xs-12 well">
-				<div class="details col-xs-12 col-sm-10">
+			
+			<div class="col-xs-12 well fitText">
+				<div class="btn-toolbar pull-right">
+					<form action="{% url 'organizer:node_delete' trip.id %}" method="post">
+					{% csrf_token %}
+						<input type="hidden" name="node_id" value="{{ node.id }}">
+						<button type="submit" class="btn btn-danger  "/><span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</form>
+				</div>
+				<div class="details col-xs-12 col-sm-10 ">
 					<div class="col-xs-12 col-sm-2">
-						<label>type : </label><div class="col-xs-12">{{ node.type }}</div>
+						<label class="col-xs-6 col-sm-12">Type</label><div class="col-xs-6 col-xs-12">{{ node.type }}</div>
 					</div>
+					
+					<div class="col-xs-12 col-sm-2">
+						<label class="col-xs-6 col-sm-12"> Price</label>  <div class="price col-xs-6 col-sm-12" >{{ node.price }}</div>
+					</div>				
 					
 					
 					<div class="col-xs-12 col-sm-2">
-						<label>start date :</label> <div class="col-xs-12">{{ node.startDate }}</div>
+						<label class="col-xs-6 col-sm-12 "><span class="text-nowrap">Start Date</span></label> <div class="col-xs-6 col-sm-12 "><span class="text-nowrap">{{ node.startDate }}</span></div>
+						
+						
 					</div>
 					<div class="col-xs-12 col-sm-2">
-						<label>end date :</label> <div class="col-xs-12">{{ node.endDate }}</div>
+						<label class="text-center col-xs-6 col-sm-12"><span class="text-nowrap">End Date</span></label> <div class="col-xs-6 col-sm-12 "><span class="text-nowrap">{{ node.endDate }}</span></div>
 					</div>
-					<div class="col-xs-12 col-sm-2">
+					<div class="col-xs-12 col-sm-4">
 					<p>
-						<label>Text :</label>  <div class="col-xs-12">{{ node.text }}</div>
+						<label class="col-xs-6 col-sm-12">Text</label>  <div class="col-xs-6 col-sm-12">{{ node.text }}</div>
 					</p>
 					</div>
-					<div class="col-xs-12 col-sm-2">
-						<label class="col-xs-12"> price :</label>  <div class="price col-xs-12">{{ node.price }}</div>
-					</div>
+
 					
 				</div>
 				{% if can_delete %}
-				<form class="edit_form col-xs-12 col-sm-10" name="input" action="{% url 'organizer:node_edit' trip.id %}" method="post" style="display: none;">
+				<form class="edit_form col-xs-12 col-sm-10 form-group" name="input" action="{% url 'organizer:node_edit' trip.id %}" method="post" style="display: none;">
 					{% csrf_token %}
 					<input type="hidden" name="node_id" value="{{ node.id }}">
 					<div class="col-xs-12 col-sm-2">
-						<label >type:</label> 
-						<select id="type_select" name="type" >
-							{% for type in types %}
-							<option value="{{ forloop.counter }}" {% if forloop.counter == node.type.pk %}selected {% endif %}>{{ type }}</option>
-							{% endfor %}
-						</select>
+						<label class="col-xs-6 col-sm-12">Type</label>
+						<div class="col-xs-6 col-sm-12">
+							<select class=" form-control" id="type_select" name="type" >
+								{% for type in types %}
+								<option value="{{ forloop.counter }}" {% if forloop.counter == node.type.pk %}selected {% endif %}>{{ type }}</option>
+								{% endfor %}
+							</select>
+						</div>
 					</div>
 					<div class="col-xs-12 col-sm-2">
-						<label>startDate :</label> <input class="date" name="startDate" type="text" value="{{ trip.startDate|date:'m/d/Y' }}">
+						<label class="col-xs-6 col-sm-12">Start Date</label> 
+						<div class="col-xs-6 col-sm-12">
+							<input class="date  form-control" name="startDate" type="text" value="{{ trip.startDate|date:'m/d/Y' }}">
+						</div>
 					</div>
 					<div class="col-xs-12 col-sm-2">
-						<label >endDate :</label> 
-						<input class="date"  name="endDate" type="text" value="{{ trip.endDate|date:'m/d/Y' }}">
+						<label class="date col-xs-6 col-sm-12">End Date</label>
+						<div class="col-xs-6 col-sm-12">
+							<input class="date form-control"  name="endDate" type="text" value="{{ trip.endDate|date:'m/d/Y' }}">
+						</div>
 					</div>
 					
 					<div class="col-xs-12 col-sm-2">
-						<label for="text">Text :</label> 
-						<input type="text" name="text" value="{{ node.text }}"/>
+						<label class="date col-xs-6 col-sm-12" for="text">Text</label>
+						<div class="col-xs-6 col-sm-12">
+							<input class="form-control " type="text" name="text" value="{{ node.text }}"/>
+						</div>
 					</div>
 					<div class="col-xs-12 col-sm-2">
-						<label for="comment">price :</label> <input id="comment" type="text" name="price" value="{{ node.price }}"/>
+						<label  class="date col-xs-6 col-sm-12" >Price</label>
+						<div class="col-xs-6 col-sm-12">
+							<input class="form-control" id="comment" type="text" name="price" value="{{ node.price }}"/>
+						</div>
 					</div>
 					<div class="col-xs-12 col-sm-2">
 						<input type="submit" value="Submit" class="btn btn-primary"/>
@@ -78,15 +103,7 @@
 					<button type="button" id="editDate" class="edit btn btn-success">Edit</button>
 					<input type="button" value="Cancel" id="cancelEditDate" class="cancel btn" style="display: none;"/>
 				</div>
-				<div class="col-xs-12 col-sm-1">
-					<form action="{% url 'organizer:node_delete' trip.id %}" method="post">
-					{% csrf_token %}
-						<input type="hidden" name="node_id" value="{{ node.id }}">
-						<button type="submit" class="btn btn-danger" /><span class="glyphicon glyphicon-remove"></span>
-						</button>
-					</form>
-					
-				</div>
+				
 				
 				{%endif%}
 			</div>

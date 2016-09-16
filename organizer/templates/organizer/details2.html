@@ -1,0 +1,173 @@
+{% extends 'organizer/base.html'%}
+
+
+{% block title %}
+	Trip Details 2
+{% endblock %}
+
+
+{% block body %}
+	<div class="container">
+		<div class="row">
+			
+				<div class="col-xs-12 well">
+					<h1 class="text-center">Trip Details<h1>
+					Destination : {{ trip.destination }}
+					Type : {{ trip.trip_type }}
+				</div>
+			
+		</div>
+		<div class="row">
+			<div class="well">
+				<div class="list-group">
+					{% for node in nodes %}
+						<div class="list-group-item">
+						{% if node.type.type_name == "Flight" %}
+							{% include 'organizer/flight_item.html' %}
+						{% elif node.type.type_name == "Hotel" %}
+							{% include 'organizer/hotel_item.html' %}
+						{% elif node.type.type_name == "Transport" %}
+							{% include 'organizer/transfer_item.html' %}
+						{% endif %}
+							
+							
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		
+		{% if can_delete %}
+		 <div class="row">
+			<div class="col-xs-12 well">
+			
+				
+				
+				<div class = "btn-group">
+				   <button type = "button" class = "btn btn-success dropdown-toggle" data-toggle = "dropdown">
+					  Add 
+					  <span class = "caret"></span>
+				   </button>
+				   
+				   <ul class = "dropdown-menu" role = "menu">
+						<li>
+							<form action="{% url 'organizer:add_node' trip.id %}" method="post" style="display: inline;">
+								{% csrf_token %}
+								<input type="hidden" name="type" value="1" />
+								<button  type="submit" class="btn btn-success ">
+								<span class="glyphicon glyphicon-plus"></span>&nbsp; Flight
+								</button>
+							</form>
+						</li>
+					  <li>
+						<form action="{% url 'organizer:add_node' trip.id %}" method="post" style="display: inline;">
+								{% csrf_token %}
+								<input type="hidden" name="type" value="2" />
+								<button  type="submit" class="btn btn-success ">
+								<span class="glyphicon glyphicon-plus"></span>&nbsp; Hotel
+								</button>
+							</form>
+						</li>
+					  <li>
+						<form action="{% url 'organizer:add_node' trip.id %}" method="post" style="display: inline;">
+								{% csrf_token %}
+								<input type="hidden" name="type" value="3" />
+								<button  type="submit" class="btn btn-success ">
+								<span class="glyphicon glyphicon-plus"></span>&nbsp;  Transport
+								</button>
+							</form>
+						</li>
+					  
+					  
+					  
+				   </ul>
+				   
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		
+		<div class="row">
+			<div class="well">
+				<div class=" col-xs-6 text-center total-heading-col">
+					<h4 class="list-group-item-heading total-heading"> Days </h4>
+					
+					<h4 class="list-group-item-heading total-heading"> Sum </h4>
+				</div>
+				<div class="col-xs-6 text-center total-value-col">
+					<h4 class="list-group-item-heading total-value"> 10 </h4> 
+					 
+					<h4 class="list-group-item-heading total-value"> <span id="totalSum" ></span><small> $ </small></h4> 
+				</div>	
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		
+		<div class="row">
+		{% if can_delete %}
+			<div class="col-xs-12">
+			 <form action="{% url 'organizer:delete_trip' trip.id %}" method="post" style="display: inline;">
+				{% csrf_token %}
+				<input type="hidden" name="trip_id" value="{{ trip.id }}" />
+				<button type="submit" class="btn btn-danger  btn-primary btn-lg">
+					<span class="glyphicon glyphicon-remove"></span>&nbsp; Delete The Whole Trip
+				</button>
+			</form>
+			</div>
+			{% endif %}
+		</div>
+		
+	</div>
+
+
+
+
+{% if error_message %}
+	<p><strong>{{ error_message }}</strong></p>
+	
+{% endif %}
+
+
+
+
+
+
+<script>
+$(function() {
+	
+	var sum = 0;
+	/*
+	 sum += +($(this).find('#hotelPrice').text());
+	 sum += +($(this).find('#flightPrice').text()); 
+	 sum += +($(this).find('#transportPrice').text());
+	*/
+	$(".price").each(function (index) {
+		price = parseInt($(this).val());
+		if (!(isNaN(price)) ){
+			sum += price; 
+		}
+	});
+	
+	$("#totalSum").html(sum);
+	$(".date").datepicker();
+});
+
+$('.edit').click(function(){
+	$(this).parent().siblings('.edit_form').show();
+	$(this).parent().siblings('.details').hide();
+	$(this).siblings('.cancel').show();
+	$(this).hide();
+});
+
+$('.cancel').click(function(){
+	$(this).parent().siblings('.details').show();
+	$(this).parent().siblings('.edit_form').hide();
+	$(this).siblings('.edit').show();
+	$(this).hide();
+});
+
+
+</script>
+
+{% endblock %}
+
