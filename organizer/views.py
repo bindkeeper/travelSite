@@ -91,6 +91,22 @@ def new_detail(request, trip_id):
 			return render(request, 'organizer/new_details.html', {'trip' : trip, "can_delete": True ,'loged_user': loged_user, 'nodes': nodes, 'types' : types})
 		else:
 			return render(request, 'organizer/new_details.html', {'trip' : trip, 'loged_user': loged_user, 'nodes': nodes})
+			
+def details2(request, trip_id):	
+	if not request.user.is_authenticated():
+		trip = get_object_or_404(NewTrip, pk=trip_id)
+		nodes = Node.objects.filter(trip=trip.pk)
+		return render(request, 'organizer/details2.html', {'trip' : trip, 'nodes': nodes})
+		
+	else:
+		trip = get_object_or_404(NewTrip, pk=trip_id)
+		nodes = Node.objects.filter(trip=trip.pk)
+		types = NodeType.objects.all()
+		loged_user = request.user
+		if trip.user == request.user:
+			return render(request, 'organizer/details2.html', {'trip' : trip, "can_delete": True ,'loged_user': loged_user, 'nodes': nodes, 'types' : types})
+		else:
+			return render(request, 'organizer/details2.html', {'trip' : trip, 'loged_user': loged_user, 'nodes': nodes})
 	
 	
 def share(request, trip_id):
@@ -152,6 +168,18 @@ def add_node(request, trip_id):
 		return render(request, 'organizer/new_details.html', {'trip' : trip, 'nodes': nodes})
 	node = Node()
 	node.trip = NewTrip.objects.get(id=trip_id)
+	node.type = NodeType.objects.get(id=request.POST['type'])
+	node.save()
+	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
+	
+def add_flight(request, trip_id):
+	if not request.user.is_authenticated():
+		trip = get_object_or_404(NewTrip, pk=trip_id)
+		nodes = Node.objects.filter(trip=trip.pk)
+		return render(request, 'organizer/new_details.html', {'trip' : trip, 'nodes': nodes})
+	node = Node()
+	node.trip = NewTrip.objects.get(id=trip_id)
+	
 	node.save()
 	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
 	
@@ -168,7 +196,7 @@ def node_edit(request, trip_id):
 		node.price = price
 	except ValueError:
 		pass
-	node.type = NodeType.objects.get(id=request.POST['type'])
+	
 	node.startDate = datetime.strptime(request.POST['startDate'], '%m/%d/%Y')
 	node.endDate = datetime.strptime(request.POST['endDate'], '%m/%d/%Y')
 	node.text = request.POST['text']

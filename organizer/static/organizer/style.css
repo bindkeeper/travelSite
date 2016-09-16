@@ -1,7 +1,12 @@
 body {
 	background: white url("image/paper_background.jpg");
+	padding-bottom: 20px;
 }
-
+.date {
+	text-align: center;
+	width: 100px;
+	display: inline;
+}
 .navbar {
 	border-radius: 0px;
 }
@@ -20,3 +25,119 @@ body {
     width: 50%;
     padding: 10px;
 }
+
+.fitText {
+	
+	font-size: 13px;
+}
+textarea.form-control{
+	height: 150px;
+	resize: none;
+	
+}
+.form-control {
+	font-size: 13px;
+}
+
+.col-sm-2 {
+	border: 0px;
+	margin: 0px;
+}
+
+label, div{
+    display: block;
+    text-align: center;
+    line-height: 150%;
+}
+
+.my_border {
+	
+	border-color: red;
+}
+
+
+.item-details {
+	float: left;
+	width: 47%;
+}
+
+.flight-icon {
+	float:left;
+}
+
+.glyphicon-plane, .glyphicon-transfer {
+	font-size: 40px;
+	top: 4px;
+}
+.glyphicon-calendar {
+	font-size: 20px;
+	padding :0px;
+}
+
+.flight-number, .hotel-name {
+	padding-top: 30px;
+}
+
+.item-type-icon {
+	float:left;
+}
+
+.flight-departure, .flight-arrival , .hotel-checkin , .hotel-checkout{
+	float: left;
+	width: 47%;
+	font-size: 12px;
+}
+.flight-departure, .hotel-checkin {
+	clear: left;
+}
+.list-group-item-text{
+	font-size: 14px;
+}
+
+.price {
+	font-size: 28px;
+	width: 120px;
+	
+}
+.input-price {
+	display: inline;
+	
+}
+.currency {
+	padding: 6px 1px;
+	font-size: 30px;
+	
+}
+
+.stars {
+	margin:12px auto 12px;    
+	font-size: 13px;
+}
+
+
+.total-heading-col {
+	background-color: #337ab7;
+	color: white;
+	padding: 10px;
+	border-radius: 4px 0 0 4px;
+}
+
+.total-heading {
+	padding: 10px 5px;
+}
+
+.total-value-col {
+	background-color: white;
+	padding: 10px;
+	border-radius: 0 4px 4px 0;
+}
+
+.total-value {
+	padding: 10px 5px;
+}
+
+.total-stars {
+	font-size: 13px;
+	padding: 3px 4px 1px 4px;
+}
+

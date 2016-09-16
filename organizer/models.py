@@ -35,6 +35,7 @@ class Flight(models.Model):
 	
 	ticket_number = models.CharField(max_length=200)
 	is_favorite = models.BooleanField(default=False)
+	departure_date = models.DateTimeField(null=True)
 	
 	def __str__(self):
 		return self.ticket_number
