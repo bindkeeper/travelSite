@@ -1,5 +1,5 @@
 {% load staticfiles %}
-
+<div class="hotel">
 <div class="row">
 	<div class=" col-xs-offset-11 col-xs-1 delete-item">
 		<form action="{% url 'organizer:node_delete' trip.id %}" method="post">
@@ -12,38 +12,46 @@
 	</div>
 </div>
 <div class="row">
-	<form name="input" action="{% url 'organizer:node_edit' trip.id %}" method="post">
-		{% csrf_token %}
-		<input type="hidden" name="node_id" value="{{ node.id }}">
-		<div class="col-xs-12 col-sm-5">
-		<div><img src=" {% static 'organizer/icons/hotel.svg' %} " class="item-type-icon" height="120" ></img></div>
-		<h5 class="hotel-name">Hotel Name</h5>
-		<h5>Hotel Address</h5>
-		<div class="hotel-checkin"><span><i class="btn glyphicon glyphicon-calendar flight"></i></span>
-			<h5>CheckIn Time</h5>
-			<input size="5" class="date form-control" name="startDate" type="text" value="{{ node.startDate|date:'m/d/Y' }}">
-			
-		</div>
-		<div class="hotel-checkout"><span><i class="btn glyphicon glyphicon-calendar flight"></i></span>
-			<h5>CheckOut Time</h5>
-			<input size="5" class="date input-price form-control" name="endDate" type="text" value="{{ node.endDate|date:'m/d/Y' }}">
-			
-		</div>
-		<div class="text-center clear-float">
-			
-		</div>
-		</div>
-		<div class="col-xs-12 col-sm-4">
-			<h4 class="list-group-item-heading"> Free Text </h4>
-			<textarea name="text"  class=" form-control list-group-item-text free-text ">{{node.text}}</textarea>
-		</div>
-		<div class="col-xs-12 col-sm-3 text-center">
-			<h2><input class="form-control price input-price" type="text" name="price" value="{{ node.price }}"/><span class="currency">$<span></h2>
-			<h5>Total 2 Days</h5>
-			
-			
-			<input type="submit" value="Save" class="btn btn-primary btn-lg  btn-block"/>
-		</div>
-		<div class="clearfix"></div>
-	</form>
+	
+		<form class="item-form" name="input" action="{% url 'organizer:node_edit_json' trip.id %}" method="post">
+			{% csrf_token %}
+			<input type="hidden" name="node_id" value="{{ node.id }}">
+			<div class="col-xs-12 col-sm-5">
+			<div><img src=" {% static 'organizer/icons/hotel.svg' %} " class="item-type-icon" height="120" ></img></div>
+			<h5 class="hotel-name">Hotel Name</h5>
+			<h5>Hotel Address</h5>
+			<div class="coordinates">
+				<span>Coordinates</scpan>
+				<input type="text" class="form-control coordinate" value="{{node.lat}}" name="lat"></input>
+				<input type="text" class="form-control coordinate" value="{{node.lng}}" name="lng"></input>
+			</div>
+			<div class="hotel-checkin"><span><i class="btn glyphicon glyphicon-calendar flight"></i></span>
+				<h5>CheckIn Time</h5>
+				<input size="5" class="date form-control" name="startDate" type="text" value="{{ node.startDate|date:'m/d/Y' }}">
+				
+			</div>
+			<div class="hotel-checkout"><span><i class="btn glyphicon glyphicon-calendar flight"></i></span>
+				<h5>CheckOut Time</h5>
+				<input size="5" class="date input-price form-control" name="endDate" type="text" value="{{ node.endDate|date:'m/d/Y' }}">
+				
+			</div>
+			<div class="text-center clear-float">
+				
+			</div>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<h4 class="list-group-item-heading"> Free Text </h4>
+				<textarea name="text"  class=" form-control list-group-item-text free-text ">{{node.text}}</textarea>
+			</div>
+			<div class="col-xs-12 col-sm-3 text-center">
+				<h2><input class="form-control price input-price" type="text" name="price" value="{{ node.price }}"/><span class="currency">$<span></h2>
+				<h5>Total 2 Days</h5>
+				
+				
+				<input type="submit" value="Save" class="btn btn-primary btn-lg  btn-block btn-save"/>
+			</div>
+			<div class="clearfix"></div>
+		</form>
+	</div>
 </div>
+

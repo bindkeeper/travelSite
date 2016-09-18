@@ -1,0 +1,22 @@
+{% load staticfiles %}
+{% for trip in all_shared_trips %}
+	<div class="col-xs-12 col-sm-6">
+		<div class="thumbnail">	
+			
+				
+				<a href="{% url 'organizer:detail' trip.id %}">
+					{% if trip.trip_picture %}
+					<img src="{{ trip.trip_picture.url }}" class="img-responsive">
+					{% else %}
+					<img src="{% static 'organizer/image/ski.jpg' %}" class="img-responsive">
+					{% endif %}
+				</a>
+				
+				<h2>{{ trip.destination }}</h2><h4>by {{ trip.user }}</h4>
+				<!-- View Details -->
+				<a href="{% url 'organizer:detail' trip.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+			
+		</div>
+		{% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+	</div>
+{% endfor %}

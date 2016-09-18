@@ -141,3 +141,10 @@ label, div{
 	padding: 3px 4px 1px 4px;
 }
 
+.coordinate {
+	
+	width: 80px;
+	display: inline;
+}
+
+#mapid { height: 300px; }

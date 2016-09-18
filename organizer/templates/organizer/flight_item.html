@@ -1,5 +1,5 @@
 {% load staticfiles %}
-
+<div class="flight">
 <div class="row">
 	<div class=" col-xs-offset-11 col-xs-1 delete-item">
 		<form action="{% url 'organizer:node_delete' trip.id %}" method="post">
@@ -12,25 +12,36 @@
 	</div>
 </div>
 <div class="row">
-	<form name="input" action="{% url 'organizer:node_edit' trip.id %}" method="post">
+	<form class="item-form flight" name="input" action="{% url 'organizer:node_edit_json' trip.id %}" method="post">
 		{% csrf_token %}
 		<input type="hidden" name="node_id" value="{{ node.id }}">
 		<div class="col-xs-12 col-sm-5">
 			<div><i class="btn glyphicon glyphicon-plane item-type-icon"></i></div>
 			<h5 class="flight-number">Flight #</h5>
-				<div class="flight-departure"><img src="{% static 'organizer/icons/departure.svg' %}" class="departure-icon" height="20" ></img>
+			<div class="flight-departure"><img src="{% static 'organizer/icons/departure.svg' %}" class="departure-icon" height="20" ></img>
 				<h5>TakeOff Time</h5>
-				<input size="5" class="date form-control" name="startDate" type="text" value="{{ node.startDate|date:'m/d/Y' }}">
+				<input size="5" class="date form-control startDate" name="startDate" type="text" value="{{ node.startDate|date:'m/d/Y' }}">
 				<p class="airport">Departure Airport</p>
+				<div class="coordinates departure-coor">
+					<span>Coordinates</span>
+					<div class="text-danger small"></div>
+					<input type="text" class="form-control coordinate departure_lat" value="{{node.departure_lat}}" name="departure_lat"></input>
+					<input type="text" class="form-control coordinate departure_lng" value="{{node.departure_lng}}" name="departure_lng"></input>
+				</div>
 			</div >
 			<div class="flight-arrival">
 				<img src="{% static 'organizer/icons/arrival.svg' %}" class="departure-icon" height="20" ></img>
 				<h5>Landing Time</h5>
 				<div class="text-center">
-				<input size="5" class="date input-price form-control" name="endDate" type="text" value="{{ node.endDate|date:'m/d/Y' }}">
+				<input size="5" class="date input-price form-control endDate" name="endDate" type="text" value="{{ node.endDate|date:'m/d/Y' }}">
 				
 				</div>
 				<p class="airport">Arrival Airport</p>
+				<div class="coordinates arrival-coor">
+					<span>Coordinates</span>
+					<input type="text" class="form-control coordinate" value="{{node.arrival_lat}}" name="arrival_lat"></input>
+					<input type="text" class="form-control coordinate" value="{{node.arrival_lng}}" name="arrival_lng"></input>
+				</div>
 			</div>
 			<div class="text-center clear-float">
 				
@@ -45,8 +56,9 @@
 				<h2><input class="form-control price input-price" type="text" name="price" value="{{ node.price }}"/><span class="currency">$<span></h2>
 			</div>
 			<h4>Total 2 hours</h4>
-			<input type="submit" value="Save" class="btn btn-primary btn-lg  btn-block"/>
+			<input type="submit" value="Save" class="btn btn-primary btn-lg  btn-block btn-save"/>
 		</div>
 		<div class="clearfix"></div>
 	</form>
+</div>
 </div>

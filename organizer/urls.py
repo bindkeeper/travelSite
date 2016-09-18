@@ -22,6 +22,7 @@ urlpatterns = [
 	
 	url(r'^trip/(?P<trip_id>[0-9]+)/add_node$', views.add_node, name='add_node'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/node_edit$', views.node_edit, name='node_edit'),
+	url(r'^trip/(?P<trip_id>[0-9]+)/node_edit_json$', views.node_edit_json, name='node_edit_json'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/node_delete$', views.node_delete, name='node_delete'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/share$', views.share, name='share'),
 	

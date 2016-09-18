@@ -10,6 +10,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import View
 from datetime import datetime
 from django.core.urlresolvers import reverse
+import decimal
+from django.contrib import messages
+from django.core import serializers
+import json
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -120,7 +125,9 @@ def share(request, trip_id):
 	except (KeyError, NewTrip.DoesNotExist):
 		return JsonResponse({'success': False})
 	else:
-		return JsonResponse({'success': True})
+		all_shared_trips = NewTrip.objects.filter(shared=True)
+		html = render_to_string('organizer/index_items.html', {'all_shared_trips': all_shared_trips})
+		return JsonResponse({'success': True, 'shared': html})
 	
 def date_change(request, trip_id):
 	trip = get_object_or_404(Trip, pk=trip_id)
@@ -188,6 +195,7 @@ def node_edit(request, trip_id):
 		trip = get_object_or_404(NewTrip, pk=trip_id)
 		nodes = Node.objects.filter(trip=trip.pk)
 		return render(request, 'organizer/new_details.html', {'trip' : trip, 'nodes': nodes})
+	errors = {}
 	node_id = request.POST['node_id']
 	node = Node.objects.get(id=node_id)
 	price = request.POST['price']
@@ -197,11 +205,146 @@ def node_edit(request, trip_id):
 	except ValueError:
 		pass
 	
-	node.startDate = datetime.strptime(request.POST['startDate'], '%m/%d/%Y')
-	node.endDate = datetime.strptime(request.POST['endDate'], '%m/%d/%Y')
+	try:
+		node.startDate = datetime.strptime(request.POST['startDate'], '%m/%d/%Y')
+		node.endDate = datetime.strptime(request.POST['endDate'], '%m/%d/%Y')
+	except ValueError:
+		pass
+		
+	if "lat" in request.POST and "lng" in request.POST:
+		try:
+			decimal.Decimal(request.POST['lat'])
+			node.lat = request.POST['lat']
+		except decimal.InvalidOperation:
+			pass
+		
+		try:
+			decimal.Decimal(request.POST['lng'])
+			node.lng = request.POST['lng']
+		except decimal.InvalidOperation:
+			pass
+		
+	if "departure_lat" in request.POST and "departure_lng" in request.POST:
+	
+		try:
+			decimal.Decimal(request.POST['departure_lat'])
+			node.departure_lat = request.POST['departure_lat']
+		except decimal.InvalidOperation:
+			messages.add_message(request, messages.ERROR , 'We did it!')
+			pass
+	
+		try:
+			decimal.Decimal(request.POST['departure_lng'])
+			node.departure_lng = request.POST['departure_lng']
+		except decimal.InvalidOperation:
+			pass
+		
+	
+	if "arrival_lat" in request.POST and "arrival_lng" in request.POST:
+		
+		try:
+			decimal.Decimal(request.POST['arrival_lat'])
+			node.arrival_lat = request.POST['arrival_lat']
+		except decimal.InvalidOperation:
+			pass
+		
+		try:
+			decimal.Decimal(request.POST['arrival_lng'])
+			node.arrival_lng = request.POST['arrival_lng']
+		except decimal.InvalidOperation:
+			pass
+		
+	
 	node.text = request.POST['text']
 	node.save()
 	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
+	
+def node_edit_json(request, trip_id):
+	if not request.user.is_authenticated():
+		return JsonResponse({'success': False})
+	errors = {}
+	node_id = request.POST['node_id']
+	node = Node.objects.get(id=node_id)
+	price = request.POST['price']
+	try:
+		float(price)
+		node.price = price
+	except ValueError:
+		pass
+	
+	try:
+		node.startDate = datetime.strptime(request.POST['startDate'], '%m/%d/%Y')
+		node.endDate = datetime.strptime(request.POST['endDate'], '%m/%d/%Y')
+	except ValueError:
+		pass
+		
+	if "lat" in request.POST and "lng" in request.POST:
+		try:
+			decimal.Decimal(request.POST['lat'])
+			node.lat = request.POST['lat']
+		except decimal.InvalidOperation:
+			pass
+		
+		try:
+			decimal.Decimal(request.POST['lng'])
+			node.lng = request.POST['lng']
+		except decimal.InvalidOperation:
+			pass
+		
+	if "departure_lat" in request.POST and "departure_lng" in request.POST:
+	
+		try:
+			decimal.Decimal(request.POST['departure_lat'])
+			node.departure_lat = request.POST['departure_lat']
+		except decimal.InvalidOperation:
+			messages.add_message(request, messages.ERROR , 'We did it!')
+			pass
+	
+		try:
+			decimal.Decimal(request.POST['departure_lng'])
+			node.departure_lng = request.POST['departure_lng']
+		except decimal.InvalidOperation:
+			pass
+		
+	
+	if "arrival_lat" in request.POST and "arrival_lng" in request.POST:
+		
+		try:
+			decimal.Decimal(request.POST['arrival_lat'])
+			node.arrival_lat = request.POST['arrival_lat']
+		except decimal.InvalidOperation:
+			pass
+		
+		try:
+			decimal.Decimal(request.POST['arrival_lng'])
+			node.arrival_lng = request.POST['arrival_lng']
+		except decimal.InvalidOperation:
+			pass
+		
+	
+	node.text = request.POST['text']
+	node.save()
+	
+	item_node = Node.objects.filter(id=node_id)
+	
+	
+	
+	#item_node.append({'success': True})
+	
+	raw_data = serializers.serialize('python', item_node)
+	actual_data = [d['fields'] for d in raw_data]
+	
+	
+	
+	
+	
+	#print(actual_data)
+	#print(item_node.__dict__)
+	
+	
+	
+	return JsonResponse({'success': True, 'node': actual_data[0]})
+		
 	
 def node_delete(request, trip_id):
 	node_id = request.POST['node_id']

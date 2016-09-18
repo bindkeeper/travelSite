@@ -98,6 +98,16 @@ class Node(models.Model):
 	price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 	trip = models.ForeignKey(NewTrip, default=None, on_delete=models.SET_DEFAULT, blank=True, null=True)
 	text = models.CharField(max_length=1000)
+	lat = models.DecimalField(null = True, max_digits=9, decimal_places=6)
+	lng = models.DecimalField(null = True, max_digits=9, decimal_places=6)
+	
+	# for flight and transfer
+	departure_lat = models.DecimalField(null = True, max_digits=9, decimal_places=6)
+	departure_lng = models.DecimalField(null = True, max_digits=9, decimal_places=6)
+	
+	arrival_lat = models.DecimalField(null = True, max_digits=9, decimal_places=6)
+	arrival_lng = models.DecimalField(null = True, max_digits=9, decimal_places=6)
+	
 	sequance_in_trip = models.IntegerField(null=True)
 
 	
