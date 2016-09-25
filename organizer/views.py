@@ -55,7 +55,7 @@ def delete_trip(request, trip_id):
 	return redirect('/organizer/', request)
 
 
-def search(all_shared_trips, query):
+def search(all_shared_trips, query=""):
 	context = {}
 	all_shared_trips = all_shared_trips.filter(
 		Q(destination__icontains=query) |
@@ -76,10 +76,10 @@ def index(request):
 			query = request.GET.get('q')
 			if query:
 				return render(request, 'organizer/index.html', search(all_shared_trips, query) )
-		return render(request, 'organizer/index.html', context )
+		return render(request, 'organizer/index.html', search(all_shared_trips) )
 	else:
 		all_shared_trips = NewTrip.objects.filter(shared=True)
-		context = {}
+		context = {'all_shared_trips': all_shared_trips}
 		if request.method == "GET":
 			
 			query = request.GET.get('q')
@@ -97,6 +97,7 @@ def index(request):
 			activate_key = ActivationKey.objects.get(user_id=loged_user.id)
 			url="http://localhost:8000/organizer/activate/"+activate_key.key
 			context['activate'] = url
+		print(context)
 		return render(request, 'organizer/index.html', context)
 			
 	
