@@ -14,14 +14,14 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'organizer/style.css' %}" />
 	
 	<style>
-		#mapid { height: 220px; }
+		
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 	<link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
 	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="{% static 'organizer/main.js' %}"></script>
-	<script src="{% static 'organizer/oms.min.js' %}"></script>
+	
 
 	</head>
 <body>
@@ -48,15 +48,27 @@
 							My Trips
 						</a>
 					</li>
+					{% if activate %}
+						<li class=" my-alert">
+							<a class="my-alert" href="{{activate}}">
+								Click Here To Activate Your Account
+							</a>
+						</li>
+					{% endif %}
+					
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right" >
+					<li>
+						{% include 'organizer/search.html' %}
+					</li>
 					<li class="">
 						<a href=" {% url 'organizer:create_trip' %} ">
 							<span class="glyphicon glyphicon-plus" area-hidden="true"></span>&nbsp;
 							Add Trip
 						</a>
 					</li>
+					
 					<li class="">
 						<a href=" {% url 'organizer:logout_user' %} ">
 							<span class="glyphicon glyphicon-off" area-hidden="true"></span>&nbsp;
@@ -66,6 +78,9 @@
 				</ul>
 			{% else %}
 				<ul class="nav navbar-nav navbar-right" >
+					<li>
+						{% include 'organizer/search.html' %}
+					</li>
 					<li class="">
 						<a href=" {% url 'organizer:login_user' %} ">
 							

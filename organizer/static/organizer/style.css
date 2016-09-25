@@ -82,12 +82,17 @@ label, div{
 	float:left;
 }
 
-.flight-departure, .flight-arrival , .hotel-checkin , .hotel-checkout{
+.flight-departure, .flight-arrival, .pickup, .dropoff {
 	float: left;
 	width: 47%;
 	font-size: 12px;
 }
-.flight-departure, .hotel-checkin {
+.my-alert {
+	padding: 0px;
+	margin: 0px;
+}
+
+.flight-departure, .pickup{
 	clear: left;
 }
 .list-group-item-text{

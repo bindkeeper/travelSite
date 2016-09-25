@@ -17,22 +17,26 @@
 			{% csrf_token %}
 			<input type="hidden" name="node_id" value="{{ node.id }}">
 			<div class="col-xs-12 col-sm-5">
-			<div><img src=" {% static 'organizer/icons/hotel.svg' %} " class="item-type-icon" height="120" ></img></div>
+			<div><img src=" {% static 'organizer/icons/hotel.svg' %} " class="item-type-icon" height="100" ></img></div>
 			<h5 class="hotel-name">Hotel Name</h5>
 			<h5>Hotel Address</h5>
-			<div class="coordinates">
-				<span>Coordinates</scpan>
+			
+			<div class="coordinates departure-coor">
+				<div>Coordinates</div>
 				<input type="text" class="form-control coordinate" value="{{node.lat}}" name="lat"></input>
 				<input type="text" class="form-control coordinate" value="{{node.lng}}" name="lng"></input>
 			</div>
-			<div class="hotel-checkin"><span><i class="btn glyphicon glyphicon-calendar flight"></i></span>
-				<h5>CheckIn Time</h5>
-				<input size="5" class="date form-control" name="startDate" type="text" value="{{ node.startDate|date:'m/d/Y' }}">
+			
+			<div class="col-xs-12 col-sm-6 hotel-checkin"><span></span>
+				<label>CheckIn Time</label>
+				<i class="btn glyphicon glyphicon-calendar flight"></i><input size="5" class="date form-control" name="startDate" type="text" value="{{ node.startDate|date:'m/d/Y' }}">
 				
 			</div>
-			<div class="hotel-checkout"><span><i class="btn glyphicon glyphicon-calendar flight"></i></span>
-				<h5>CheckOut Time</h5>
-				<input size="5" class="date input-price form-control" name="endDate" type="text" value="{{ node.endDate|date:'m/d/Y' }}">
+			<div class="col-xs-12 col-sm-6 hotel-checkout">
+				<label>CheckOut Time</label>
+				<div class="btn-group" role="group" aria-label="...">
+				<i class="btn glyphicon glyphicon-calendar flight"></i><input size="5" class="date input-price form-control" name="endDate" type="text" value="{{ node.endDate|date:'m/d/Y' }}">
+				</div>
 				
 			</div>
 			<div class="text-center clear-float">

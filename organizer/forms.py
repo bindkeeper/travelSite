@@ -76,9 +76,6 @@ class UserForm(forms.ModelForm):
 		
 class MyRegistrationForm(UserCreationForm):
     email = forms.EmailField(required = True)
-    
-
-
 
     class Meta:
         model = User
@@ -88,7 +85,6 @@ class MyRegistrationForm(UserCreationForm):
         user = super(MyRegistrationForm, self).save(commit = False)
         user.email = self.cleaned_data['email']
         
-
         if commit:
             user.save()
 

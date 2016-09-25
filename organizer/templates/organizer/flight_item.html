@@ -18,12 +18,14 @@
 		<div class="col-xs-12 col-sm-5">
 			<div><i class="btn glyphicon glyphicon-plane item-type-icon"></i></div>
 			<h5 class="flight-number">Flight #</h5>
+			
 			<div class="flight-departure"><img src="{% static 'organizer/icons/departure.svg' %}" class="departure-icon" height="20" ></img>
 				<h5>TakeOff Time</h5>
 				<input size="5" class="date form-control startDate" name="startDate" type="text" value="{{ node.startDate|date:'m/d/Y' }}">
 				<p class="airport">Departure Airport</p>
+				
 				<div class="coordinates departure-coor">
-					<span>Coordinates</span>
+					<div>Coordinates</div>
 					<div class="text-danger small"></div>
 					<input type="text" class="form-control coordinate departure_lat" value="{{node.departure_lat}}" name="departure_lat"></input>
 					<input type="text" class="form-control coordinate departure_lng" value="{{node.departure_lng}}" name="departure_lng"></input>
@@ -38,7 +40,7 @@
 				</div>
 				<p class="airport">Arrival Airport</p>
 				<div class="coordinates arrival-coor">
-					<span>Coordinates</span>
+					<div>Coordinates</div>
 					<input type="text" class="form-control coordinate" value="{{node.arrival_lat}}" name="arrival_lat"></input>
 					<input type="text" class="form-control coordinate" value="{{node.arrival_lng}}" name="arrival_lng"></input>
 				</div>

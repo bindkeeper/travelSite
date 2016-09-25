@@ -219,7 +219,7 @@ var popup = L.popup()
 	.setContent("I am a standalone popup.")
 	.openOn(mymap);
 */
-
+/*
 var popup = L.popup();
 
 function onMapClick(e) {
@@ -228,7 +228,7 @@ function onMapClick(e) {
 		.setContent("You clicked on the map at " + e.latlng.toString())
 		.openOn(mymap);
 }
-
+*/
 //mymap.on('click', onMapClick);
 
 
@@ -348,7 +348,7 @@ function addMarker() {
 
 	var group = new L.featureGroup(markers);
 
-	mymap.fitBounds(group.getBounds().pad(0.5));
+	mymap.fitBounds(group.getBounds());
 }
 
 </script>

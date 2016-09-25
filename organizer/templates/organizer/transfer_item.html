@@ -16,34 +16,33 @@
 		{% csrf_token %}
 		<input type="hidden" name="node_id" value="{{ node.id }}">
 		<div class="col-xs-12 col-sm-5">
-
-		<div><i class="btn glyphicon glyphicon-transfer item-type-icon"></i></div>
-		<h5 class="hotel-name">Transfer Company</h5>
-		
-		<div class="hotel-checkin"><div class="booking-item-departure"><img src="{% static 'organizer/icons/car.svg' %}" class="departure-icon" height="20" ></img></div>
-			<h5>Pick Up Time</h5>
-			<input size="5" class="date form-control" name="startDate" type="text" value="{{ node.startDate|date:'m/d/Y' }}">
+			<div><i class="btn glyphicon glyphicon-transfer item-type-icon"></i></div>
+			<h5 class="hotel-name">Transfer Company</h5>
 			
-			<div class="coordinates departure-coor">
-				<span>Coordinates</scpan>
-				<input type="text" class="form-control coordinate" value="{{node.departure_lat}}" name="departure_lat"></input>
-				<input type="text" class="form-control coordinate" value="{{node.departure_lng}}" name="departure_lng"></input>
+			<div class="pickup"><img src="{% static 'organizer/icons/car.svg' %}" class="departure-icon" height="20" ></img>
+				<h5>Pick Up Time</h5>
+				<input size="5" class="date form-control" name="startDate" type="text" value="{{ node.startDate|date:'m/d/Y' }}">
+				
+				<div class="coordinates departure-coor">
+					<div>Coordinates</div>
+					<input type="text" class="form-control coordinate" value="{{node.departure_lat}}" name="departure_lat"></input>
+					<input type="text" class="form-control coordinate" value="{{node.departure_lng}}" name="departure_lng"></input>
+				</div>
+				
 			</div>
-			
-		</div>
-		<div class="hotel-checkout"><div class="booking-item-departure"><img src="{% static 'organizer/icons/car.svg' %}" class="departure-icon" height="20" ></img></div>
-			<h5>Drop Time</h5>
-			<input size="5" class="date input-price form-control" name="endDate" type="text" value="{{ node.endDate|date:'m/d/Y' }}">
-			<div class="coordinates arrival-coor">
-				<span>Coordinates</scpan>
-				<input type="text" class="form-control coordinate" value="{{node.arrival_lat}}" name="arrival_lat"></input>
-				<input type="text" class="form-control coordinate" value="{{node.arrival_lng}}" name="arrival_lng"></input>
+			<div class="dropoff"><div class="booking-item-departure"><img src="{% static 'organizer/icons/car.svg' %}" class="departure-icon" height="20" ></img></div>
+				<h5>DropOff Time</h5>
+				<input size="5" class="date input-price form-control" name="endDate" type="text" value="{{ node.endDate|date:'m/d/Y' }}">
+				<div class="coordinates arrival-coor">
+					<div>Coordinates</div>
+					<input type="text" class="form-control coordinate" value="{{node.arrival_lat}}" name="arrival_lat"></input>
+					<input type="text" class="form-control coordinate" value="{{node.arrival_lng}}" name="arrival_lng"></input>
+				</div>
+				
 			</div>
-			
-		</div>
-		<div class="text-center clear-float">
-			
-		</div>
+			<div class="text-center clear-float">
+				
+			</div>
 		</div>
 		<div class="col-xs-12 col-sm-4">
 			<h4 class="list-group-item-heading"> Free Text </h4>

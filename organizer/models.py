@@ -5,6 +5,11 @@ from django.db.models.fields.files import ImageFieldFile
 from PIL import Image, ExifTags
 import io
 
+class ActivationKey(models.Model):
+	user_id = models.ForeignKey(User, null=True)
+	key = models.CharField(max_length = 100)
+	
+
 class TripType(models.Model):
 	type_name = models.CharField(max_length=20)
 	

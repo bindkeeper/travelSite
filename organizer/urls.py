@@ -8,7 +8,8 @@ urlpatterns = [
 	url(r'^create_trip/$', views.create_trip, name='create_trip'),
 	url(r'^(?P<trip_id>[0-9]+)/delete_trip/$', views.delete_trip, name='delete_trip'),
 	
-	url(r'^register/$', views.register, name='register'),
+	url(r'^register/$', views.register_with_activation, name='register'),
+	url(r'^activate/(?P<key>.+)$', views.activate, name='activate'),
 	url(r'^login/$', views.login_user, name='login_user'),
 	url(r'^logout_user/$', views.logout_user, name='logout_user'),
 	url(r'^trip/(?P<trip_id>[0-9]+)/$', views.details2, name='detail'),
