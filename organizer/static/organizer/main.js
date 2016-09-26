@@ -38,13 +38,10 @@ $(function() {
 			encode      : true
         })
 		.done(function(data) {
-			console.log(data); 
-			if ( ! data.success) {
-				alert('failed');
-			} else {					
-				alert('success');	
-			}
+			
+			
 			sumCalculate();
+			daysCalculate();
 		});
 	});
 });

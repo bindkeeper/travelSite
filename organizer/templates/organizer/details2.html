@@ -12,9 +12,9 @@
 		<div class="row">
 			
 				<div class="col-xs-12 well">
-					<h1 class="text-center">Trip Details<h1>
-					Destination : {{ trip.destination }}
-					Type : {{ trip.trip_type }}
+					<h1 class="text-center">{{ trip.trip_type }} <h1>
+					{{ trip.destination }}	
+					
 				</div>
 			
 		</div>
@@ -103,7 +103,7 @@
 					<h3 class="list-group-item-heading total-heading"> Sum </h3>
 				</div>
 				<div class="col-xs-6 text-center total-value-col">
-					<h3 class="list-group-item-heading total-value"> 10 </h3> 
+					<h3 class="list-group-item-heading total-value"> <span id="total_Days"></span> </h3> 
 					 
 					<h3 class="list-group-item-heading total-value"> <span id="totalSum" ></span><small> $ </small></h3> 
 				</div>	
@@ -155,6 +155,40 @@ function sumCalculate() {
 	$("#totalSum").html(sum);
 }
 
+function treatAsUTC(date) {
+    var result = new Date(date);
+    result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+    return result;
+}
+
+function daysBetween(startDate, endDate) {
+    var millisecondsPerDay = 24 * 60 * 60 * 1000;
+    return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
+}
+
+function daysCalculate() {
+	$(".item").each(function (index){
+		start_date = $( this ).find('[name=startDate]').val();
+		
+		end_date = $( this ).find('[name=endDate]').val();
+		days = daysBetween(start_date, end_date);
+		
+		$( this ).find(".total_time").text(days);
+	});
+	
+	var total_days = 0;
+	
+	$('.total_time').each(function (index) {
+		days = parseInt($(this).html());
+		if (!(isNaN(days)) ){
+			total_days += days; 
+		}
+	});
+	
+	$("#total_Days").html(total_days);
+	
+}
+
 $(function() {
 	
 	
@@ -164,6 +198,7 @@ $(function() {
 	 sum += +($(this).find('#transportPrice').text());
 	*/
 	sumCalculate();
+	daysCalculate();
 	$(".date").datepicker();
 	
 	
@@ -350,6 +385,11 @@ function addMarker() {
 
 	mymap.fitBounds(group.getBounds());
 }
+
+
+
+
+
 
 </script>
 

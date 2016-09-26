@@ -160,6 +160,11 @@ label, div{
 #mapid { height: 300px; }
 
 
-td{
-    min-width:150px; /* force table to be oversize */
+.compare-table td{
+   min-width:150px; /* force table to be oversize */
+}
+
+.days {
+	font-size: 19px;
+	padding: 10px;
 }

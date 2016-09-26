@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div class="flight">
+<div class="flight item">
 <div class="row">
 	<div class=" col-xs-offset-11 col-xs-1 delete-item">
 		<form action="{% url 'organizer:node_delete' trip.id %}" method="post">
@@ -57,7 +57,7 @@
 			<div>
 				<h2><input class="form-control price input-price" type="text" name="price" value="{{ node.price }}"/><span class="currency">$<span></h2>
 			</div>
-			<h4 class="total_time">Total 2 hours</h4>
+			<h2><span class="total_time"></span><span class="days" >Days</span></h2>
 			<input type="submit" value="Save" class="btn btn-primary btn-lg  btn-block btn-save"/>
 		</div>
 		<div class="clearfix"></div>
