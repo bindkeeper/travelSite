@@ -55,11 +55,14 @@ function addTripsToURL(element)
 		var checked_trips = [];
 		$(".trip").each(function (index) {
 			var checkbox = $( this ).find('.check_for_compare');
-			if(checkbox[0].checked) {
-				var id = $( this ).children('.trip_id').val();
-				checked_trips.push(id);
+			if (checkbox.length != 0) {
+				if(checkbox[0].checked) {
+					var id = $( this ).children('.trip_id').val();
+					checked_trips.push(id);
+				}
 			}
 		});
+		
         return this.href+"?trips="+checked_trips;
     });
 }
