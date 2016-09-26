@@ -1,5 +1,11 @@
 
 $(function() {
+	$("#compare").click(function(e) {
+		e.preventDefault(); 
+		alert("compare clicked");
+	});
+	
+	
 	$(".btn-share").click(function(){
 		
 		var url = $(this).attr('href');
@@ -8,8 +14,6 @@ $(function() {
 		$.getJSON(url, function(result){
 			
 				if (result.success) {
-					//$(self).toggleClass('active');
-					
 					console.log(result.shared);
 					$(".shared").html(result.shared);
 					
@@ -44,3 +48,18 @@ $(function() {
 		});
 	});
 });
+
+function addTripsToURL(element)
+{
+    $(element).attr('href', function() {
+		var checked_trips = [];
+		$(".trip").each(function (index) {
+			var checkbox = $( this ).find('.check_for_compare');
+			if(checkbox[0].checked) {
+				var id = $( this ).children('.trip_id').val();
+				checked_trips.push(id);
+			}
+		});
+        return this.href+"?trips="+checked_trips;
+    });
+}

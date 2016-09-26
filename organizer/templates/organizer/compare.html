@@ -1,0 +1,41 @@
+{% extends 'organizer/base.html'%}
+
+
+{% block title %}
+	Compare
+{% endblock %}
+{% load staticfiles %}
+
+{% block body %}
+<div class="container">
+    
+    <div class="row">
+        <div class="panel panel-primary table-responsive">
+			<div class="span3">
+            
+            <table class="table"> 
+                <thead>
+                    <tr class="bg-primary">
+                        <th></th>
+						{% for trip in trips %}
+							<th>{{trip.destination}}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sum</td>
+                       {% for trip in trips %}
+							{% with trip_id=trip.pk  %}  
+							<th>{{ prices|get_item:trip_id }}</th>
+							{% endwith %}
+                        {% endfor %}
+                    </tr>
+                    
+                </tbody>
+            </table>
+			</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

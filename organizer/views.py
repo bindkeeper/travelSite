@@ -19,8 +19,11 @@ from django.template.loader import render_to_string
 import requests
 import hashlib
 import random
-from django.db.models import Q
+from django.db.models import Q, Sum
 from itertools import chain
+from django.template.defaulttags import register
+
+
 # Create your views here.
 
 def create_trip(request):
@@ -43,6 +46,30 @@ def create_trip(request):
 		}
 		return render(request, 'organizer/create_new_trip.html', context)
 
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+		
+def compare(request):
+	print(request.GET.get("trips"))
+	loged_user = request.user
+	if request.GET.get("trips"):
+		trips_ids = request.GET.get("trips").split(",")
+		trips_ids = filter(None, trips_ids)
+		trips_ids= list(map(int, trips_ids))
+		trips = NewTrip.objects.filter(id__in=trips_ids)
+		prices = {}
+		for trip in trips:
+			sum = Node.objects.filter(trip=trip.pk).aggregate(Sum('price'))
+			prices[trip.pk] = sum['price__sum']
+		print(prices)
+		loged_user = request.user
+	
+		context = {'trips': trips, 'prices':prices, 'loged_user':loged_user}
+	
+		return render(request, 'organizer/compare.html', context)
+	return render(request, 'organizer/error.html', {'error': 'You did not choose any trips to compare', 'loged_user':loged_user})
+		
 def delete_trip(request, trip_id):
 	if not request.user.is_authenticated():
 		return render(request, 'organizer/login.html')

@@ -88,13 +88,20 @@
 						</a>
 					</li>
 					<li class="">
-						<a href=" {% url 'organizer:register' %} ">
+						<a  href=" {% url 'organizer:register' %} ">
 							
 							Register
 						</a>
 					</li>
 				</ul>
 			{% endif %}
+			<ul class="nav navbar-nav">
+				<li >
+					<a onclick="addTripsToURL(this)" href=" {% url 'organizer:compare' %} ">
+						Compare
+					</a>
+				</li>
+			</ul>
 			</div>
 		</div>
 	</nav>

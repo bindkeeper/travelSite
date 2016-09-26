@@ -9,7 +9,9 @@
 		<div class="col-sm-6 well">
 		<h3>Shared Trips2</h3>
 		<div class="shared">
-			{% include 'organizer/index_items.html' %}
+			
+			{% include 'organizer/index_items.html' 
+			
 		</div>
 	{% else %}
 		
@@ -20,27 +22,36 @@
 				{% for trip in all_trips %}
 				
 					<div class="col-sm-12 col-md-6">
-						<div class="thumbnail">
-							
+						<div class="thumbnail trip">
+							<input type="hidden" class="trip_id" value="{{ trip.id }}">
 							<div class="caption">
-							<a href="{% url 'organizer:detail' trip.id %}">
-							{% if trip.trip_picture %}
-                            <img src="{{ trip.trip_picture.url }}" class="img-responsive">
-							{% else %}
-							<img src="{% static 'organizer/image/ski.jpg' %}" class="img-responsive">
-							{% endif %}
-							</a>
+								
+								<a href="{% url 'organizer:detail' trip.id %}">
+									{% if trip.trip_picture %}
+									<img src="{{ trip.trip_picture.url }}" class="img-responsive">
+									{% else %}
+									<img src="{% static 'organizer/image/ski.jpg' %}" class="img-responsive">
+									{% endif %}
+								</a>
 								<h2>{{ trip.destination }}</h2>
 								
-
-								<!-- View Details -->
-								<a href="{% url 'organizer:detail' trip.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
-
-							   
-								<!-- Favorite Album -->
-								<a href="{% url 'organizer:share' trip.id %}" class="btn btn-default btn-sm btn-share" role="button">
-									Share
-								</a>
+								<div class="row">
+									<div class="col-xs-6 col-sm-4">
+										<!-- View Details -->
+										<a href="{% url 'organizer:detail' trip.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+									</div>
+									<div class="col-xs-6 col-sm-4">
+										<!-- Favorite Album -->
+										<a href="{% url 'organizer:share' trip.id %}" class="btn btn-default btn-sm btn-share" role="button">
+											Share
+										</a>
+									</div>
+									<div class="col-xs-12 col-sm-4">
+										<div class="checkbox">
+											<input class="check_for_compare" type="checkbox">Check for compare
+										</div>
+									</div>
+								</div>
 
 							</div>
 						</div>

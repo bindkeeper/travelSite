@@ -6,6 +6,7 @@ app_name = 'organizer'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
 	url(r'^create_trip/$', views.create_trip, name='create_trip'),
+	url(r'^compare/$', views.compare, name='compare'),
 	url(r'^(?P<trip_id>[0-9]+)/delete_trip/$', views.delete_trip, name='delete_trip'),
 	
 	url(r'^register/$', views.register_with_activation, name='register'),
