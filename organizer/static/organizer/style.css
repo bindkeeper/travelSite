@@ -95,19 +95,24 @@ label, div{
 .flight-departure, .pickup{
 	clear: left;
 }
+
 .list-group-item-text{
 	font-size: 14px;
 }
 
 .price {
-	font-size: 28px;
+	font-size: 25px;
 	width: 120px;
-	
 }
+
 .input-price {
 	display: inline;
-	
 }
+
+.total_time{
+	font-size: 25px;
+}
+
 .currency {
 	padding: 6px 1px;
 	font-size: 30px;
