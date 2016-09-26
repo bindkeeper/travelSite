@@ -1,8 +1,9 @@
 {% load staticfiles %}
 {% for trip in all_shared_trips %}
-	<div class="col-xs-12 col-sm-6">
-		<div class="thumbnail">	
-			
+	<div class="col-xs-12 col-md-6">
+		<div class="thumbnail trip">
+			<input type="hidden" class="trip_id" value="{{ trip.id }}">		
+			<div class="caption">
 				
 				<a href="{% url 'organizer:detail' trip.id %}">
 					{% if trip.trip_picture %}
@@ -12,10 +13,17 @@
 					{% endif %}
 				</a>
 				
-				<h2>{{ trip.destination }}</h2><h4>by {{ trip.user }}</h4>
+				<h2>{{ trip.destination }}</h2>
+				<h4>by {{ trip.user }}</h4>
 				<!-- View Details -->
-				<a href="{% url 'organizer:detail' trip.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
-			
+				
+				<div class="row">
+					<div class="col-xs-12">
+						<a href="{% url 'organizer:detail' trip.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+					</div>
+				</div>
+				
+			</div>
 		</div>
 		{% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
 	</div>
