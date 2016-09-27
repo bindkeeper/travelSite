@@ -1,7 +1,10 @@
 {% load staticfiles %}
 <div class="transport item">
 <div class="row">
-	<div class=" col-xs-offset-11 col-xs-1 delete-item">
+	<div class="col-xs-1 insert-item">
+		{% include 'organizer/insert.html' %}
+	</div>
+	<div class=" col-xs-offset-10 col-xs-1 delete-item">
 		<form action="{% url 'organizer:node_delete' trip.id %}" method="post">
 			{% csrf_token %}
 			<input type="hidden" name="node_id" value="{{ node.id }}">

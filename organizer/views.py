@@ -19,9 +19,10 @@ from django.template.loader import render_to_string
 import requests
 import hashlib
 import random
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, F
 from itertools import chain
 from django.template.defaulttags import register
+
 
 
 # Create your views here.
@@ -162,12 +163,12 @@ def new_detail(request, trip_id):
 def details2(request, trip_id):	
 	if not request.user.is_authenticated():
 		trip = get_object_or_404(NewTrip, pk=trip_id)
-		nodes = Node.objects.filter(trip=trip.pk)
+		nodes = Node.objects.filter(trip=trip.pk).order_by('sequance_in_trip')
 		return render(request, 'organizer/details2.html', {'trip' : trip, 'nodes': nodes})
 		
 	else:
 		trip = get_object_or_404(NewTrip, pk=trip_id)
-		nodes = Node.objects.filter(trip=trip.pk)
+		nodes = Node.objects.filter(trip=trip.pk).order_by('sequance_in_trip')
 		types = NodeType.objects.all()
 		loged_user = request.user
 		if trip.user == request.user:
@@ -247,10 +248,20 @@ def insert_node(request, trip_id):
 		trip = get_object_or_404(NewTrip, pk=trip_id)
 		nodes = Node.objects.filter(trip=trip.pk)
 		return render(request, 'organizer/new_details.html', {'trip' : trip, 'nodes': nodes})
+	
+	next_node = Node.objects.get(id=request.POST['node_id'])
+	if next_node is None:
+		print('no such node')
+		return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
+	sequance_in_trip = next_node.sequance_in_trip
+	Node.objects.filter(sequance_in_trip__gte=sequance_in_trip).update(sequance_in_trip=F('sequance_in_trip') + 1 )
+	
 	node = Node()
 	node.trip = NewTrip.objects.get(id=trip_id)
 	node.type = NodeType.objects.get(id=request.POST['type'])
+	node.sequance_in_trip = sequance_in_trip
 	node.save()
+	
 	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
 	
 def add_flight(request, trip_id):
@@ -260,7 +271,7 @@ def add_flight(request, trip_id):
 		return render(request, 'organizer/new_details.html', {'trip' : trip, 'nodes': nodes})
 	node = Node()
 	node.trip = NewTrip.objects.get(id=trip_id)
-	
+	node_id = request.POST['node_id']
 	node.save()
 	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
 	

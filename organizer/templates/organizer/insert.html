@@ -1,0 +1,39 @@
+<div class = "btn-group">
+	<button type = "button" class = "btn btn-success dropdown-toggle" data-toggle = "dropdown">
+		Insert 
+		<span class = "caret"></span>
+	</button>
+   
+	<ul class = "dropdown-menu" role = "menu">
+		<li>
+			<form action="{% url 'organizer:insert_node' trip.id %}" method="post" style="display: inline;">
+				{% csrf_token %}
+				<input type="hidden" name="type" value="1" />
+				<input type="hidden" name="node_id" value="{{ node.id }}">
+				<button  type="submit" class="btn btn-success ">
+				<span class="glyphicon glyphicon-plus"></span>&nbsp; Flight
+				</button>
+			</form>
+		</li>
+		<li>
+			<form action="{% url 'organizer:insert_node' trip.id %}" method="post" style="display: inline;">
+				{% csrf_token %}
+				<input type="hidden" name="type" value="2" />
+				<input type="hidden" name="node_id" value="{{ node.id }}">
+				<button  type="submit" class="btn btn-success ">
+				<span class="glyphicon glyphicon-plus"></span>&nbsp; Hotel
+				</button>
+			</form>
+		</li>
+		<li>
+			<form action="{% url 'organizer:insert_node' trip.id %}" method="post" style="display: inline;">
+				{% csrf_token %}
+				<input type="hidden" name="type" value="3" />
+				<input type="hidden" name="node_id" value="{{ node.id }}">
+				<button  type="submit" class="btn btn-success ">
+				<span class="glyphicon glyphicon-plus"></span>&nbsp;  Transport
+				</button>
+			</form>
+		</li>
+	</ul>
+</div>
