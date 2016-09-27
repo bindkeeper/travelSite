@@ -238,6 +238,18 @@ def add_node(request, trip_id):
 	node = Node()
 	node.trip = NewTrip.objects.get(id=trip_id)
 	node.type = NodeType.objects.get(id=request.POST['type'])
+	node.sequance_in_trip = Node.objects.filter(trip=trip_id).order_by('-sequance_in_trip')[0].sequance_in_trip + 1
+	node.save()
+	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
+	
+def insert_node(request, trip_id):
+	if not request.user.is_authenticated():
+		trip = get_object_or_404(NewTrip, pk=trip_id)
+		nodes = Node.objects.filter(trip=trip.pk)
+		return render(request, 'organizer/new_details.html', {'trip' : trip, 'nodes': nodes})
+	node = Node()
+	node.trip = NewTrip.objects.get(id=trip_id)
+	node.type = NodeType.objects.get(id=request.POST['type'])
 	node.save()
 	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
 	
