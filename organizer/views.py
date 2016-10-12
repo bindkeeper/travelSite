@@ -19,7 +19,7 @@ from django.template.loader import render_to_string
 import requests
 import hashlib
 import random
-from django.db.models import Q, Sum, F
+from django.db.models import Q, Sum, F, Count
 from itertools import chain
 from django.template.defaulttags import register
 
@@ -239,7 +239,11 @@ def add_node(request, trip_id):
 	node = Node()
 	node.trip = NewTrip.objects.get(id=trip_id)
 	node.type = NodeType.objects.get(id=request.POST['type'])
-	node.sequance_in_trip = Node.objects.filter(trip=trip_id).order_by('-sequance_in_trip')[0].sequance_in_trip + 1
+	nodes = Node.objects.filter(trip=trip_id).order_by('-sequance_in_trip')
+	if not nodes:
+		node.sequance_in_trip = 0
+	else:
+		node.sequance_in_trip = nodes[0].sequance_in_trip + 1
 	node.save()
 	return redirect(reverse('organizer:detail', kwargs={'trip_id' :   trip_id}), request)
 	
